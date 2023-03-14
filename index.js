@@ -14,5 +14,15 @@ module.exports = {
     "react/react-in-jsx-scope": "off",
     "react/require-default-props": "off",
     "react/prop-types": "off"
-  }
+  },
+
+  "overrides": [
+    {
+      "files": ["./pages/api/**/*.ts"],
+      "rules": {
+        // Allow console.log in serverless functions endpoints.
+        "no-console": "off"
+      }
+    }
+  ]
 };
