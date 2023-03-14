@@ -1,6 +1,6 @@
 {
   "name": "@totominc/eslint-config-next",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Enhanced ESLint config for Next.js projects.",
   "author": "Thomas Cazade <cazade.thomas@gmail.com>",
   "license": "GPL-3",
