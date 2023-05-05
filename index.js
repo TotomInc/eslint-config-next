@@ -1,5 +1,7 @@
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
+  plugins: ["unused-imports"],
+
   "extends": [
     "next/core-web-vitals",
     "airbnb",
