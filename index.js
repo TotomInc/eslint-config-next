@@ -12,6 +12,16 @@ module.exports = {
     "plugin:markdown/recommended",
   ],
 
+  ignorePatterns: [
+    "*.d.ts",
+    "dist",
+    "public",
+    "Dockerfile",
+    "package-lock.json",
+    "yarn.lock",
+    "pnpm-lock.yaml",
+  ],
+
   "rules": {
     "import/prefer-default-export": "off",
     "react/jsx-props-no-spreading": "off",
