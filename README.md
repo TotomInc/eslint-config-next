@@ -20,18 +20,27 @@
   npm install --save-dev @totominc/eslint-config-next eslint prettier
   ```
 
-4. Create an `.eslintrc.json` file in the root of your project with the following content:
+4. Create an `.eslintrc.cjs` file in the root of your project with the following content:
 
-  ```json
-  {
-    "extends": ["@totominc/next"],
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    }
-  }
+  ```js
+  module.exports = {
+    extends: ["@totominc/next"],
+
+    parserOptions: {
+      project: "./tsconfig.json"
+    },
+  };
   ```
 
-5. If deploying on Vercel, [add the following environment variable](https://vercel.com/guides/using-private-dependencies-with-vercel#other-package-registries) to your project:
+5. Create a `prettier.config.js` file in the root of your project with the following content:
+
+  ```js
+  module.exports = {
+    plugins: ["prettier-plugin-tailwindcss"],
+  };
+  ```
+
+6. If deploying on Vercel, [add the following environment variable](https://vercel.com/guides/using-private-dependencies-with-vercel#other-package-registries) to your project:
 
   ```bash
   NPM_RC=//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
