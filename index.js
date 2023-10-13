@@ -35,13 +35,6 @@ module.exports = {
 
   "overrides": [
     {
-      "files": ["./pages/api/**/*.ts", "./app/**/route.ts"],
-      "rules": {
-        // Allow `console.log` in serverless functions endpoints.
-        "no-console": "off"
-      }
-    },
-    {
       "files": ["*.json"],
       "parser": "jsonc-eslint-parser",
     },
