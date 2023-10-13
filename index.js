@@ -9,6 +9,7 @@ module.exports = {
     "plugin:prettier/recommended",
 
     "plugin:eslint-comments/recommended",
+    "plugin:promise/recommended",
     "plugin:jsonc/recommended-with-jsonc",
     "plugin:jsonc/prettier",
     "plugin:markdown/recommended",
