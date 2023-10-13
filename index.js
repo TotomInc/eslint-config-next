@@ -12,6 +12,7 @@ module.exports = {
     "plugin:promise/recommended",
     "plugin:jsonc/recommended-with-jsonc",
     "plugin:jsonc/prettier",
+    "plugin:json-schema-validator/recommended",
     "plugin:markdown/recommended",
   ],
 
