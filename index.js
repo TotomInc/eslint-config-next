@@ -27,11 +27,14 @@ module.exports = {
 
   "rules": {
     "import/prefer-default-export": "off",
+
     "react/jsx-props-no-spreading": "off",
     "react/no-array-index-key": "off",
     "react/react-in-jsx-scope": "off",
     "react/require-default-props": "off",
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+
+    "unused-imports/no-unused-imports": "error",
   },
 
   "overrides": [
