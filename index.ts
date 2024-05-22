@@ -34,7 +34,6 @@ export function totominc() {
         "react-hooks-extra/ensure-use-memo-has-non-empty-deps": "error",
         "react-hooks-extra/prefer-use-state-lazy-initialization": "error",
         "react-naming-convention/component-name": "error",
-        "react-naming-convention/filename": ["error", "PascalCase"],
         "react-naming-convention/use-state": "error",
       },
     },
