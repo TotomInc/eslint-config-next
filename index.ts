@@ -41,7 +41,19 @@ export function totominc() {
       files: [GLOB_SRC],
       rules: {
         "perfectionist/sort-exports": "error",
-        "perfectionist/sort-imports": "error",
+        "perfectionist/sort-imports": ["error", {
+          type: "line-length",
+          "newlines-between": "always",
+          "internal-pattern": ['@/**', '~/**'],
+          groups: [
+            ['side-effect', 'side-effect-style'],
+            ['builtin-type', 'external-type', 'builtin', 'external'],
+            ['internal-type', 'internal'],
+            ['parent-type', 'sibling-type', 'index-type', 'parent', 'sibling', 'index'],
+            'object',
+            'unknown',
+          ]
+        }],
         "perfectionist/sort-named-exports": "error",
         "perfectionist/sort-named-imports": "error",
       },
