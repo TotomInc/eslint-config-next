@@ -20,6 +20,7 @@
     "eslint-plugin-jsx-a11y": "6.8.0",
     "eslint-plugin-promise": "6.1.1",
     "eslint-plugin-react-hook-form": "0.3.0",
+    "eslint-plugin-react-hooks": "4.6.2",
     "eslint-plugin-react-refresh": "0.4.7",
     "eslint-plugin-tailwindcss": "3.16.0",
     "eslint-plugin-write-good-comments": "0.2.0"
