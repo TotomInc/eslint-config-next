@@ -35,6 +35,11 @@ export function totominc() {
         "react-hooks-extra/prefer-use-state-lazy-initialization": "error",
         "react-naming-convention/component-name": "error",
         "react-naming-convention/use-state": "error",
+
+        // Allow floating promise when `onClick={doSomethingAsync}` with an async function
+        // passed to an event handler.
+        // See: https://github.com/typescript-eslint/typescript-eslint/issues/4619
+        "@typescript-eslint/no-misused-promises": ["error", { "checksVoidReturn": false }],
       },
     },
     {
