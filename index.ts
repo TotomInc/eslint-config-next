@@ -40,6 +40,9 @@ export function totominc() {
         // passed to an event handler.
         // See: https://github.com/typescript-eslint/typescript-eslint/issues/4619
         "@typescript-eslint/no-misused-promises": ["error", { "checksVoidReturn": false }],
+
+        // Allow using `process.env` without `require("process")`.
+        "node/prefer-global/process": "off",
       },
     },
     {
