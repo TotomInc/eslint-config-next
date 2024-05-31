@@ -6,7 +6,10 @@
   "license": "GPL-3",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsup index.ts"
+    "build": "tsup index.ts",
+    "dev": "tsup index.ts --watch",
+    "debug-config": "npx @eslint/config-inspector",
+    "postinstall": "npm run build"
   },
   "peerDependencies": {
     "eslint": "8.57.0"
