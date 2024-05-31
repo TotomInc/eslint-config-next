@@ -79,7 +79,7 @@ export function totominc() {
     },
     ...tailwind.configs["flat/recommended"],
     ...compat.config({
-      extends: ["plugin:@next/next/recommended", "plugin:react-hook-form/recommended", "plugin:jsx-a11y/recommended"],
+      extends: ["plugin:@next/next/recommended", "plugin:jsx-a11y/recommended"],
     }),
   )
 }
