@@ -2,48 +2,83 @@
 
 ## Installation
 
-1. Setup your local `.npmrc` with a GitHub token. See [this guide](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) for more information.
+```bash
+npm i -D @totominc/eslint-config-next eslint
+```
 
-  ```bash
-  echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" >> ~/.npmrc
-  ```
+Create `eslint.config.js` in the root of your project:
 
-2. Inside your project, create a `.npmrc` that points `@totominc` scope to GitHub Packages npm registry.
+```js
+import { totominc } from "@totominc/eslint-config-next";
 
-  ```bash
-  echo "@totominc:registry=https://npm.pkg.github.com" >> .npmrc
-  ```
+export default totominc();
+```
 
-3. Install the package and its required dependencies.
+Add scripts to your `package.json`:
 
-  ```bash
-  npm install --save-dev @totominc/eslint-config-next eslint prettier
-  ```
+```json
+{
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  }
+}
+```
 
-4. Create an `.eslintrc.cjs` file in the root of your project with the following content:
+Add VSCode settings to your `.vscode/settings.json`:
 
-  ```js
-  module.exports = {
-    extends: ["@totominc/next"],
+```json
+{
+  // Enable the ESlint flat config support
+  // (remove this if your ESLint extension above v3.0.5)
+  "eslint.experimental.useFlatConfig": true,
 
-    parserOptions: {
-      project: "./tsconfig.json"
-    },
-  };
-  ```
+  // Disable the default formatter, use eslint instead
+  "prettier.enable": false,
+  "editor.formatOnSave": false,
 
-5. Create a `prettier.config.js` file in the root of your project with the following content:
+  // Auto fix
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never"
+  },
 
-  ```js
-  module.exports = {
-    plugins: ["prettier-plugin-tailwindcss"],
-  };
-  ```
+  // Silent the stylistic rules in you IDE, but still auto fix them
+  "eslint.rules.customizations": [
+    { "rule": "style/*", "severity": "off" },
+    { "rule": "format/*", "severity": "off" },
+    { "rule": "*-indent", "severity": "off" },
+    { "rule": "*-spacing", "severity": "off" },
+    { "rule": "*-spaces", "severity": "off" },
+    { "rule": "*-order", "severity": "off" },
+    { "rule": "*-dangle", "severity": "off" },
+    { "rule": "*-newline", "severity": "off" },
+    { "rule": "*quotes", "severity": "off" },
+    { "rule": "*semi", "severity": "off" }
+  ],
 
-6. If deploying on Vercel, [add the following environment variable](https://vercel.com/guides/using-private-dependencies-with-vercel#other-package-registries) to your project:
-
-  ```bash
-  NPM_RC=//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-  ```
-
-  This is required to make sure that Vercel can access and install the package from GitHub Packages npm registry.
+  // Enable eslint for all supported languages
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "html",
+    "markdown",
+    "json",
+    "jsonc",
+    "yaml",
+    "toml",
+    "xml",
+    "gql",
+    "graphql",
+    "astro",
+    "css",
+    "less",
+    "scss",
+    "pcss",
+    "postcss"
+  ]
+}
+```
