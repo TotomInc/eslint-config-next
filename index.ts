@@ -23,7 +23,18 @@ export function totominc() {
   
       rules: {
         "curly": ["error", "all"],
-        "style/brace-style": ["error", "stroustrup"],
+        "style/brace-style": ["error", "1tbs", { allowSingleLine: false }],
+        "style/max-len": ["error", { code: 80, tabWidth: 2 }],
+        "style/arrow-parens": ["error", "always"],
+        "style/jsx-self-closing-comp": ["error", { component: true, html: true }],
+        "style/jsx-sort-props": ["error", {
+          ignoreCase: false,
+          callbacksLast: true,
+          shorthandFirst: true,
+          multiline: "last",
+          noSortAlphabetically: true,
+          reservedFirst: true,
+        }],
       },
     },
     {
