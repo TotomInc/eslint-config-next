@@ -67,13 +67,8 @@ export function totominc() {
       },
     },
     ...tailwind.configs["flat/recommended"],
-    ...compat.config({ extends: ["plugin:promise/recommended"] }),
     ...compat.config({
       extends: ["plugin:@next/next/recommended", "plugin:react-hook-form/recommended", "plugin:jsx-a11y/recommended"],
-    }),
-    ...compat.config({
-      plugins: ["write-good-comments"],
-      rules: { "write-good-comments/write-good-comments": "error" },
     }),
   )
 }
