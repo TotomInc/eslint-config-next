@@ -15,6 +15,7 @@
 
   // Silent the stylistic rules in you IDE, but still auto fix them
   "eslint.rules.customizations": [
+    { "rule": "prettier/prettier", "severity": "off" },
     { "rule": "style/*", "severity": "off" },
     { "rule": "format/*", "severity": "off" },
     { "rule": "*-indent", "severity": "off" },

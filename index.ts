@@ -1,6 +1,6 @@
-import antfu, { GLOB_JSX, GLOB_SRC, GLOB_TSX } from "@antfu/eslint-config";
 import { FlatCompat } from "@eslint/eslintrc";
-import tailwind from "eslint-plugin-tailwindcss";
+import prettier from "eslint-plugin-prettier";
+import antfu, { GLOB_JSX, GLOB_SRC, GLOB_TSX } from "@antfu/eslint-config";
 
 const compat = new FlatCompat();
 
@@ -20,12 +20,49 @@ export function totominc() {
       typescript: {
         tsconfigPath: "./tsconfig.json",
       },
-  
+
       rules: {
+        // Get the same brace-style behaviour as Airbnb config.
         "curly": ["error", "all"],
         "style/brace-style": ["error", "1tbs", { allowSingleLine: false }],
-        "style/max-len": ["error", { code: 80, tabWidth: 2 }],
-        "style/arrow-parens": ["error", "always"],
+      },
+    },
+    {
+      files: [GLOB_TSX, GLOB_JSX],
+      plugins: { prettier },
+      rules: {
+        "prettier/prettier": [
+          "error",
+          {
+            printWidth: 80,
+            tabWidth: 2,
+            tabs: false,
+            singleQuote: false,
+            quoteProps: "as-needed",
+            jsxSingleQuote: false,
+            trailingComma: "all",
+            bracketSpacing: true,
+            bracketSameLine: false,
+            arrowParens: "always",
+            proseWrap: "preserve",
+            htmlWhitespaceSensitivity: "css",
+            endOfLine: "lf",
+            singleAttributePerLine: false,
+            plugins: ["prettier-plugin-tailwindcss"],
+          },
+        ],
+
+        // Disable rules that are handled by prettier.
+        "style/max-len": ["off"],
+        "style/max-statements-per-line": ["off"],
+        "style/arrow-parens": ["off"],
+        "style/comma-dangle": ["off"],
+        "style/quotes": ["off"],
+        "style/jsx-quotes": ["off"],
+        "style/jsx-max-props-per-line": ["off"],
+        "style/jsx-one-expression-per-line": ["off"],
+
+        // Extra styling rules not interacting with prettier.
         "style/jsx-self-closing-comp": ["error", { component: true, html: true }],
         "style/jsx-sort-props": ["error", {
           ignoreCase: false,
@@ -35,11 +72,7 @@ export function totominc() {
           noSortAlphabetically: true,
           reservedFirst: true,
         }],
-      },
-    },
-    {
-      files: [GLOB_TSX, GLOB_JSX],
-      rules: {
+
         "react-hooks-extra/ensure-custom-hooks-using-other-hooks": "error",
         "react-hooks-extra/ensure-use-callback-has-non-empty-deps": "error",
         "react-hooks-extra/ensure-use-memo-has-non-empty-deps": "error",
@@ -50,7 +83,7 @@ export function totominc() {
         // Allow floating promise when `onClick={doSomethingAsync}` with an async function
         // passed to an event handler.
         // See: https://github.com/typescript-eslint/typescript-eslint/issues/4619
-        "@typescript-eslint/no-misused-promises": ["error", { "checksVoidReturn": false }],
+        "@typescript-eslint/no-misused-promises": ["error", { checksVoidReturn: false }],
 
         // Allow using `process.env` without `require("process")`.
         "node/prefer-global/process": "off",
@@ -61,25 +94,24 @@ export function totominc() {
       rules: {
         "perfectionist/sort-exports": "error",
         "perfectionist/sort-imports": ["error", {
-          type: "line-length",
+          "type": "line-length",
           "newlines-between": "always",
-          "internal-pattern": ['@/**', '~/**'],
-          groups: [
-            ['side-effect', 'side-effect-style'],
-            ['builtin-type', 'external-type', 'builtin', 'external'],
-            ['internal-type', 'internal'],
-            ['parent-type', 'sibling-type', 'index-type', 'parent', 'sibling', 'index'],
-            'object',
-            'unknown',
-          ]
+          "internal-pattern": ["@/**", "~/**"],
+          "groups": [
+            ["side-effect", "side-effect-style"],
+            ["builtin-type", "external-type", "builtin", "external"],
+            ["internal-type", "internal"],
+            ["parent-type", "sibling-type", "index-type", "parent", "sibling", "index"],
+            "object",
+            "unknown",
+          ],
         }],
         "perfectionist/sort-named-exports": "error",
         "perfectionist/sort-named-imports": "error",
       },
     },
-    ...tailwind.configs["flat/recommended"],
     ...compat.config({
       extends: ["plugin:@next/next/recommended", "plugin:jsx-a11y/recommended"],
     }),
-  )
+  );
 }
