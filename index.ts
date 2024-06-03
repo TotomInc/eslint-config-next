@@ -102,9 +102,14 @@ export function totominc(...userConfigs: TypedFlatConfigItem[]) {
         "style/arrow-parens": ["off"],
         "style/comma-dangle": ["off"],
         "style/quotes": ["off"],
+        "style/operator-linebreak": ["off"],
+        "style/multiline-ternary": ["off"],
+        "style/indent": ["off"],
         "style/jsx-quotes": ["off"],
         "style/jsx-max-props-per-line": ["off"],
         "style/jsx-one-expression-per-line": ["off"],
+        "style/jsx-wrap-multilines": ["off"],
+        "style/jsx-indent": ["off"],
 
         "perfectionist/sort-exports": "error",
         "perfectionist/sort-imports": [
