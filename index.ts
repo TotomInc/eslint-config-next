@@ -29,6 +29,36 @@ export function totominc() {
     },
     {
       files: [GLOB_TSX, GLOB_JSX],
+      rules: {
+        // Extra styling rules not interacting with prettier.
+        "style/jsx-self-closing-comp": ["error", { component: true, html: true }],
+        "style/jsx-sort-props": ["error", {
+          ignoreCase: false,
+          callbacksLast: true,
+          shorthandFirst: true,
+          multiline: "last",
+          noSortAlphabetically: true,
+          reservedFirst: true,
+        }],
+
+        "react-hooks-extra/ensure-custom-hooks-using-other-hooks": "error",
+        "react-hooks-extra/ensure-use-callback-has-non-empty-deps": "error",
+        "react-hooks-extra/ensure-use-memo-has-non-empty-deps": "error",
+        "react-hooks-extra/prefer-use-state-lazy-initialization": "error",
+        "react-naming-convention/component-name": "error",
+        "react-naming-convention/use-state": "error",
+
+        // Allow floating promise when `onClick={doSomethingAsync}` with an async function
+        // passed to an event handler.
+        // See: https://github.com/typescript-eslint/typescript-eslint/issues/4619
+        "@typescript-eslint/no-misused-promises": ["error", { checksVoidReturn: false }],
+
+        // Allow using `process.env` without `require("process")`.
+        "node/prefer-global/process": "off",
+      },
+    },
+    {
+      files: [GLOB_SRC],
       plugins: { prettier },
       rules: {
         "prettier/prettier": [
@@ -62,36 +92,6 @@ export function totominc() {
         "style/jsx-max-props-per-line": ["off"],
         "style/jsx-one-expression-per-line": ["off"],
 
-        // Extra styling rules not interacting with prettier.
-        "style/jsx-self-closing-comp": ["error", { component: true, html: true }],
-        "style/jsx-sort-props": ["error", {
-          ignoreCase: false,
-          callbacksLast: true,
-          shorthandFirst: true,
-          multiline: "last",
-          noSortAlphabetically: true,
-          reservedFirst: true,
-        }],
-
-        "react-hooks-extra/ensure-custom-hooks-using-other-hooks": "error",
-        "react-hooks-extra/ensure-use-callback-has-non-empty-deps": "error",
-        "react-hooks-extra/ensure-use-memo-has-non-empty-deps": "error",
-        "react-hooks-extra/prefer-use-state-lazy-initialization": "error",
-        "react-naming-convention/component-name": "error",
-        "react-naming-convention/use-state": "error",
-
-        // Allow floating promise when `onClick={doSomethingAsync}` with an async function
-        // passed to an event handler.
-        // See: https://github.com/typescript-eslint/typescript-eslint/issues/4619
-        "@typescript-eslint/no-misused-promises": ["error", { checksVoidReturn: false }],
-
-        // Allow using `process.env` without `require("process")`.
-        "node/prefer-global/process": "off",
-      },
-    },
-    {
-      files: [GLOB_SRC],
-      rules: {
         "perfectionist/sort-exports": "error",
         "perfectionist/sort-imports": ["error", {
           "type": "line-length",
