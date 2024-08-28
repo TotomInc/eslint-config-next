@@ -15,8 +15,8 @@ export function Carousel() {
         </p>
 
         <p className="text-balance text-center text-sm font-medium text-white lg:text-xl">
-          Fort de plus de 10 années d&apos;expérience, nous réalisons tous vos
-          projets d&apos;aménagements extérieurs et jardins.
+          Fort de plus de 10 années d&apos;expérience, nous réalisons tous vos projets
+          d&apos;aménagements extérieurs et jardins.
         </p>
 
         <a
