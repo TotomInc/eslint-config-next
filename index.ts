@@ -5,12 +5,14 @@ import antfu, {
   GLOB_TSX,
   type TypedFlatConfigItem,
 } from "@antfu/eslint-config";
-import { FlatCompat } from "@eslint/eslintrc";
+import jsxA11y from "eslint-plugin-jsx-a11y";
 import prettier from "eslint-plugin-prettier";
 
-const compat = new FlatCompat();
+interface UserConfig {
+  ignoredFiles?: string[];
+}
 
-export async function totominc(...userConfigs: TypedFlatConfigItem[]) {
+export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConfigItem[]) {
   return antfu(
     {
       type: "app",
@@ -84,7 +86,7 @@ export async function totominc(...userConfigs: TypedFlatConfigItem[]) {
         curly: ["error", "all"],
         "style/brace-style": ["error", "1tbs", { allowSingleLine: false }],
 
-        // Add import sorting.
+        // Perfectionist import rules.
         "perfectionist/sort-exports": "error",
         "perfectionist/sort-imports": [
           "error",
@@ -94,7 +96,8 @@ export async function totominc(...userConfigs: TypedFlatConfigItem[]) {
             internalPattern: ["@/**"],
             groups: [
               "unknown",
-              ["side-effect", "side-effect-style", "style"],
+              ["style"],
+              ["side-effect", "side-effect-style"],
               ["builtin-type", "external-type", "builtin", "external"],
               ["internal-type", "internal"],
               ["parent-type", "sibling-type", "index-type", "parent", "sibling", "index"],
@@ -112,6 +115,7 @@ export async function totominc(...userConfigs: TypedFlatConfigItem[]) {
     {
       // Apply only to React environment.
       files: [GLOB_TSX, GLOB_JSX],
+      plugins: { ...jsxA11y.flatConfigs.recommended.plugins },
       rules: {
         // Extra styling rules not interacting with prettier.
         "style/jsx-self-closing-comp": ["error", { component: true, html: true }],
@@ -128,7 +132,6 @@ export async function totominc(...userConfigs: TypedFlatConfigItem[]) {
         ],
 
         "react-hooks-extra/ensure-custom-hooks-using-other-hooks": "error",
-        "react-hooks-extra/ensure-use-callback-has-non-empty-deps": "error",
         "react-hooks-extra/ensure-use-memo-has-non-empty-deps": "error",
         "react-hooks-extra/prefer-use-state-lazy-initialization": "error",
         "react-naming-convention/component-name": "error",
@@ -141,6 +144,9 @@ export async function totominc(...userConfigs: TypedFlatConfigItem[]) {
 
         // Allow using `process.env` without `require("process")`.
         "node/prefer-global/process": "off",
+
+        // Enable recommended a11y rules.
+        ...jsxA11y.flatConfigs.recommended.rules,
       },
     },
     {
@@ -151,9 +157,7 @@ export async function totominc(...userConfigs: TypedFlatConfigItem[]) {
         "ts/strict-boolean-expressions": "off",
       },
     },
-    ...compat.config({
-      extends: ["plugin:@next/next/recommended", "plugin:jsx-a11y/recommended"],
-    }),
+    { ignores: [...(config?.ignoredFiles || [])] },
     ...userConfigs,
   );
 }
