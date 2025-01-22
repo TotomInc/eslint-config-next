@@ -104,6 +104,11 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
 
         // Conflicting with "perfectionist/sort-imports".
         "import/order": "off",
+
+        // Don't force to use `require()` for the following globals.
+        "node/prefer-global/process": "off",
+        "node/prefer-global/buffer": "off",
+        "node/prefer-global/console": "off",
       },
     },
     {
@@ -125,6 +130,10 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
           },
         ],
 
+        // Destructuring with Next.js and `await props.params / props.searchParams` isn't possible.
+        // Or we get a non-Thenable type error with TypeScript.
+        "react/prefer-destructuring-assignment": "off",
+        
         "react-hooks-extra/ensure-custom-hooks-using-other-hooks": "error",
         "react-hooks-extra/ensure-use-memo-has-non-empty-deps": "error",
         "react-hooks-extra/prefer-use-state-lazy-initialization": "error",
