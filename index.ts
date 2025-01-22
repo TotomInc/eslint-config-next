@@ -87,7 +87,7 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
           {
             type: "natural",
             newlinesBetween: "always",
-            internalPattern: ["@/**"],
+            internalPattern: ["^@/.*"],
             groups: [
               "unknown",
               ["style"],
