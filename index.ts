@@ -17,12 +17,6 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
     {
       type: "app",
       react: true,
-      regexp: true,
-      yaml: true,
-      jsonc: true,
-      markdown: false,
-      toml: false,
-      test: false,
 
       stylistic: {
         indent: 2,
