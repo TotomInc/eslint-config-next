@@ -133,7 +133,7 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
         // Destructuring with Next.js and `await props.params / props.searchParams` isn't possible.
         // Or we get a non-Thenable type error with TypeScript.
         "react/prefer-destructuring-assignment": "off",
-        
+
         "react-hooks-extra/ensure-custom-hooks-using-other-hooks": "error",
         "react-hooks-extra/ensure-use-memo-has-non-empty-deps": "error",
         "react-hooks-extra/prefer-use-state-lazy-initialization": "error",
@@ -164,3 +164,5 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
     ...userConfigs,
   );
 }
+
+export { GLOB_JSX, GLOB_SRC, GLOB_TS, GLOB_TSX };
