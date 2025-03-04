@@ -1,10 +1,5 @@
-import antfu, {
-  GLOB_JSX,
-  GLOB_SRC,
-  GLOB_TS,
-  GLOB_TSX,
-  type TypedFlatConfigItem,
-} from "@antfu/eslint-config";
+import antfu, { GLOB_JSX, GLOB_SRC, GLOB_TS, GLOB_TSX } from "@antfu/eslint-config";
+import type { TypedFlatConfigItem } from "@antfu/eslint-config";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import prettier from "eslint-plugin-prettier";
 
