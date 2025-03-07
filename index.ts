@@ -68,6 +68,7 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
         "style/jsx-one-expression-per-line": ["off"],
         "style/jsx-wrap-multilines": ["off"],
         "style/jsx-indent": ["off"],
+        "style/jsx-curly-newline": ["off"],
         "unicorn/number-literal-case": ["off"],
         "antfu/consistent-list-newline": ["off"],
 
