@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@types/eslint-plugin-jsx-a11y": "6.10.0",
-    "@types/react": "19.1.1",
+    "@types/react": "19.1.2",
     "@types/react-dom": "19.1.2",
     "eslint": "9.24.0",
     "react": "19.1.0",
