@@ -130,11 +130,11 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
         // Or we get a non-Thenable type error with TypeScript.
         "react/prefer-destructuring-assignment": "off",
 
-        "react-hooks-extra/ensure-custom-hooks-using-other-hooks": "error",
-        "react-hooks-extra/ensure-use-memo-has-non-empty-deps": "error",
-        "react-hooks-extra/prefer-use-state-lazy-initialization": "error",
         "react-naming-convention/component-name": "error",
         "react-naming-convention/use-state": "error",
+
+        // See: https://eslint-react.xyz/docs/rules/hooks-extra-no-direct-set-state-in-use-effect
+        "react-hooks-extra/no-direct-set-state-in-use-effect": "error",
 
         // Allow floating promise when `onClick={doSomethingAsync}` with an async function
         // passed to an event handler.
