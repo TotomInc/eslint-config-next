@@ -7,6 +7,29 @@ interface UserConfig {
   ignoredFiles?: string[];
 }
 
+const NEXT_JS_SPECIFIC_FILES = [
+  "default",
+  "error",
+  "global-error",
+  "forbidden",
+  "instrumentation",
+  "instrumentation-client",
+  "layout",
+  "loading",
+  "mdx-components",
+  "middleware",
+  "proxy",
+  "not-found",
+  "page",
+  "route",
+  "template",
+  "unauthorized",
+  "proxy",
+  "manifest",
+  "robots",
+  "sitemap",
+];
+
 export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConfigItem[]) {
   return antfu(
     {
@@ -123,11 +146,25 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
 
         "react-naming-convention/component-name": "error",
         "react-naming-convention/context-name": "error",
-        "react-naming-convention/filename": ["error", "PascalCase"],
-        "react-naming-convention/filename-extension": [
+        "react-naming-convention/filename": [
           "error",
-          { extensions: [".tsx"], allow: "as-needed", ignoreFilesWithoutCode: true },
+          {
+            excepts: [
+              // Default options.
+              "index",
+              "/^_/",
+              "/^\\$/",
+              "/^[0-9]+$/",
+              "/^\\[[^\\]]+\\]$/",
+              // Ignore next.js specific files.
+              `/^(?:${NEXT_JS_SPECIFIC_FILES.join("|")})$/`,
+              // Custom colocated files to ignore, especially for Next.js.
+              `/^(?:providers)$/`,
+            ],
+            rule: "PascalCase",
+          },
         ],
+        "react-naming-convention/filename-extension": "off",
         "react-naming-convention/use-state": "error",
 
         // See: https://eslint-react.xyz/docs/rules/hooks-extra-no-direct-set-state-in-use-effect
