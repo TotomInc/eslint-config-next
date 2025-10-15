@@ -100,11 +100,6 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
 
         // Conflicting with "perfectionist/sort-imports".
         "import/order": "off",
-
-        // Don't force to use `require()` for the following globals.
-        "node/prefer-global/process": "off",
-        "node/prefer-global/buffer": "off",
-        "node/prefer-global/console": "off",
       },
     },
     {
@@ -126,11 +121,13 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
           },
         ],
 
-        // Destructuring with Next.js and `await props.params / props.searchParams` isn't possible.
-        // Or we get a non-Thenable type error with TypeScript.
-        "react/prefer-destructuring-assignment": "off",
-
         "react-naming-convention/component-name": "error",
+        "react-naming-convention/context-name": "error",
+        "react-naming-convention/filename": ["error", "PascalCase"],
+        "react-naming-convention/filename-extension": [
+          "error",
+          { extensions: [".tsx"], allow: "as-needed", ignoreFilesWithoutCode: true },
+        ],
         "react-naming-convention/use-state": "error",
 
         // See: https://eslint-react.xyz/docs/rules/hooks-extra-no-direct-set-state-in-use-effect
