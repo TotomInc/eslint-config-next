@@ -82,7 +82,7 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
           "error",
           {
             type: "natural",
-            newlinesBetween: "always",
+            newlinesBetween: 1,
             internalPattern: ["^@/.*"],
             groups: [
               "unknown",
