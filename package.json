@@ -24,7 +24,7 @@
     "lint:fix": "eslint . --fix"
   },
   "peerDependencies": {
-    "eslint": "^9.37.0"
+    "eslint": "^9.37.0 || ^10.0.0"
   },
   "dependencies": {
     "@antfu/eslint-config": "7.7.2",
@@ -42,7 +42,7 @@
     "@types/eslint-plugin-jsx-a11y": "6.10.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "eslint": "9.39.4",
+    "eslint": "10.0.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "tsup": "8.5.1",
