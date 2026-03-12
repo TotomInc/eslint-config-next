@@ -116,15 +116,22 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
       rules: {
         // Extra styling rules not interacting with prettier.
         "style/jsx-self-closing-comp": ["error", { component: true, html: true }],
-        "style/jsx-sort-props": [
+
+        // Migrated from style/jsx-sort-props to perfectionist (see https://perfectionist.dev/rules/sort-jsx-props)
+        "style/jsx-sort-props": "off",
+        "perfectionist/sort-jsx-props": [
           "error",
           {
-            ignoreCase: false,
-            callbacksLast: true,
-            shorthandFirst: true,
-            multiline: "last",
-            noSortAlphabetically: true,
-            reservedFirst: true,
+            type: "natural",
+            order: "asc",
+            ignoreCase: true,
+            specialCharacters: "keep",
+            locales: "en-US",
+            groups: ["reserved", "shorthand-prop", "unknown", "callback", "multiline-prop"],
+            customGroups: [
+              { groupName: "reserved", elementNamePattern: "^(key|ref)$" },
+              { groupName: "callback", elementNamePattern: "^on.+" },
+            ],
           },
         ],
 
