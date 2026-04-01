@@ -2,12 +2,12 @@
   "compilerOptions": {
     "target": "ESNext",
     "jsx": "react-jsx",
-    "baseUrl": ".",
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "ignoreDeprecations": "6.0",
   },
   "include": [
     "**/*.ts",

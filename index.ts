@@ -1,10 +1,10 @@
 import antfu, { GLOB_JSX, GLOB_SRC, GLOB_TS, GLOB_TSX } from "@antfu/eslint-config";
 import type { TypedFlatConfigItem } from "@antfu/eslint-config";
-import jsxA11y from "eslint-plugin-jsx-a11y";
 import prettier from "eslint-plugin-prettier";
 
 interface UserConfig {
   ignoredFiles?: string[];
+  enableNextSupport?: boolean;
 }
 
 export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConfigItem[]) {
@@ -19,6 +19,8 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
         quotes: "double",
         semi: true,
       },
+
+      nextjs: config?.enableNextSupport ?? false,
 
       typescript: {
         tsconfigPath: "./tsconfig.json",
@@ -112,13 +114,11 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
     {
       // Apply only to React environment.
       files: [GLOB_TSX, GLOB_JSX],
-      plugins: { ...jsxA11y.flatConfigs.recommended.plugins },
       rules: {
         // Extra styling rules not interacting with prettier.
         "style/jsx-self-closing-comp": ["error", { component: true, html: true }],
 
-        // Migrated from style/jsx-sort-props to perfectionist (see https://perfectionist.dev/rules/sort-jsx-props)
-        "style/jsx-sort-props": "off",
+        // See: https://perfectionist.dev/rules/sort-jsx-props
         "perfectionist/sort-jsx-props": [
           "error",
           {
@@ -135,33 +135,8 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
           },
         ],
 
-        "react-naming-convention/component-name": "error",
-        "react-naming-convention/context-name": "error",
-        "react-naming-convention/filename": "off",
-        "react-naming-convention/filename-extension": "off",
-        "react-naming-convention/use-state": "error",
-
-        // See: https://eslint-react.xyz/docs/rules/hooks-extra-no-direct-set-state-in-use-effect
-        "react-hooks-extra/no-direct-set-state-in-use-effect": "error",
-
-        // Allow floating promise when `onClick={doSomethingAsync}` with an async function
-        // passed to an event handler.
-        // See: https://github.com/typescript-eslint/typescript-eslint/issues/4619
-        "@typescript-eslint/no-misused-promises": ["error", { checksVoidReturn: false }],
-
         // Allow using `process.env` without `require("process")`.
         "node/prefer-global/process": "off",
-
-        // Enable recommended a11y rules.
-        ...jsxA11y.flatConfigs.recommended.rules,
-      },
-    },
-    {
-      // Apply only on Typescript Node + React environments.
-      files: [GLOB_TS, GLOB_TSX],
-      rules: {
-        // Doing more harm than good, need to look deeper into this.
-        "ts/strict-boolean-expressions": "off",
       },
     },
     { ignores: [...(config?.ignoredFiles || [])] },
