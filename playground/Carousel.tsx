@@ -4,9 +4,9 @@ export function Carousel() {
   return (
     <div className="relative flex h-[50vh] w-full items-center justify-center sm:h-[75vh] sm:min-h-[568px]">
       <img
-        src="/_static/landscaper-1/images/slider-3.jpg"
         alt=""
         className="absolute inset-0 object-cover object-center"
+        src="/_static/landscaper-1/images/slider-3.jpg"
       />
 
       <div className="relative flex w-full max-w-3xl flex-col items-center justify-center gap-6 px-6 lg:gap-10">
@@ -20,8 +20,8 @@ export function Carousel() {
         </p>
 
         <a
-          href="/landscaper-1/contact"
           className="flex items-center justify-center gap-2 rounded-full bg-green-700 px-8 py-3 text-sm font-bold text-white uppercase hover:bg-white hover:text-green-700 lg:text-base"
+          href="/landscaper-1/contact"
         >
           Contactez-nous
         </a>
