@@ -1,10 +1,12 @@
 import antfu, { GLOB_JSX, GLOB_SRC, GLOB_TS, GLOB_TSX } from "@antfu/eslint-config";
 import type { TypedFlatConfigItem } from "@antfu/eslint-config";
+import eslintPluginBetterTailwindcss from "eslint-plugin-better-tailwindcss";
 import prettier from "eslint-plugin-prettier";
 
 interface UserConfig {
   ignoredFiles?: string[];
   enableNextSupport?: boolean;
+  tailwindcssConfigPath?: string;
 }
 
 export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConfigItem[]) {
@@ -39,7 +41,6 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
             endOfLine: "lf",
             bracketSpacing: true,
             htmlWhitespaceSensitivity: "ignore",
-            plugins: ["prettier-plugin-tailwindcss"],
             printWidth: 100,
             proseWrap: "preserve",
             quoteProps: "as-needed",
@@ -137,6 +138,22 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
 
         // Allow using `process.env` without `require("process")`.
         "node/prefer-global/process": "off",
+      },
+    },
+    {
+      files: [GLOB_TSX, GLOB_JSX],
+      ...eslintPluginBetterTailwindcss.configs.recommended,
+      settings: {
+        "better-tailwindcss": {
+          entryPoint: config.tailwindcssConfigPath ?? "app/globals.css",
+        },
+      },
+      rules: {
+        "better-tailwindcss/enforce-consistent-class-order": [
+          "error",
+          { order: "official", unknownClassOrder: "asc", unknownClassPosition: "start" },
+        ],
+        "better-tailwindcss/enforce-consistent-line-wrapping": ["off"],
       },
     },
     { ignores: [...(config?.ignoredFiles || [])] },
