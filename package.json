@@ -5,6 +5,13 @@
   "description": "Enhanced ESLint config for Next.js projects.",
   "author": "Thomas Cazade <cazade.thomas@gmail.com>",
   "license": "GPL-3",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TotomInc/eslint-config-next.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.js",
