@@ -35,12 +35,12 @@
   },
   "dependencies": {
     "@antfu/eslint-config": "9.0.0",
-    "@eslint-react/eslint-plugin": "5.8.13",
-    "@next/eslint-plugin-next": "16.2.7",
+    "@eslint-react/eslint-plugin": "5.8.17",
+    "@next/eslint-plugin-next": "16.2.9",
     "eslint-plugin-better-tailwindcss": "4.5.0",
     "eslint-plugin-prettier": "5.5.6",
     "eslint-plugin-react-refresh": "0.5.2",
-    "prettier": "3.8.3",
+    "prettier": "3.8.4",
     "tailwindcss": "4.3.0"
   },
   "devDependencies": {
