@@ -35,13 +35,13 @@
   },
   "dependencies": {
     "@antfu/eslint-config": "9.1.0",
-    "@eslint-react/eslint-plugin": "5.10.0",
-    "@next/eslint-plugin-next": "16.2.9",
-    "eslint-plugin-better-tailwindcss": "4.6.0",
+    "@eslint-react/eslint-plugin": "5.11.2",
+    "@next/eslint-plugin-next": "16.2.10",
+    "eslint-plugin-better-tailwindcss": "4.6.1",
     "eslint-plugin-prettier": "5.5.6",
     "eslint-plugin-react-refresh": "0.5.3",
-    "prettier": "3.9.1",
-    "tailwindcss": "4.3.1"
+    "prettier": "3.9.4",
+    "tailwindcss": "4.3.2"
   },
   "devDependencies": {
     "@types/react": "19.2.17",
