@@ -11,6 +11,12 @@
   },
   "packageRules": [
     {
+      "matchPackageNames": [
+        "typescript"
+      ],
+      "enabled": false
+    },
+    {
       "groupName": "all dependencies",
       "groupSlug": "all",
       "matchPackageNames": [
