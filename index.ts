@@ -154,6 +154,7 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
           { order: "official", unknownClassOrder: "asc", unknownClassPosition: "start" },
         ],
         "better-tailwindcss/enforce-consistent-line-wrapping": ["off"],
+        "better-tailwindcss/enforce-canonical-classes": ["error"],
       },
     },
     { ignores: [...(config?.ignoredFiles || [])] },
