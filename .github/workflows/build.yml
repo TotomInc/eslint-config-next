@@ -24,5 +24,8 @@ jobs:
       - name: Install dependencies
         run: npm i --no-audit
 
+      - name: Test
+        run: npm test
+
       - name: Build
         run: npm run build

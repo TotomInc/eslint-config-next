@@ -1,0 +1,19 @@
+import { noObjectParametersRule } from "../../plugin/anti-slop/rules/no-object-parameters";
+import { ruleTester } from "./rule-tester";
+
+const error = { messageId: "objectParameter" as const };
+
+ruleTester.run("no-object-parameters", noObjectParametersRule, {
+  valid: [
+    "interface Owner { readonly id: string } function f(value: Owner) {}",
+    "function f<Value>(value: Value) {}",
+    "function f<Value extends object>(value: Value) {}",
+    "function f<Value extends Owner, Owner extends { readonly id: string }>(value: Value) {}",
+    "type Owner = { readonly id: string }; function f<Value extends Owner>(value: Value) {}",
+  ],
+  invalid: [
+    { code: "function f(value: object) {}", errors: [error] },
+    { code: "type Alias = object; function f(value: Alias) {}", errors: [error] },
+    { code: "type Alias = (object); function f(value: Alias) {}", errors: [error] },
+  ],
+});

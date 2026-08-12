@@ -3,10 +3,33 @@ import type { TypedFlatConfigItem } from "@antfu/eslint-config";
 import eslintPluginBetterTailwindcss from "eslint-plugin-better-tailwindcss";
 import prettier from "eslint-plugin-prettier";
 
+import { antiSlopPlugin, antiSlopRules } from "./plugin/anti-slop";
+
 interface UserConfig {
+  /**
+   * Glob patterns of files to ignore.
+   *
+   * @default []
+   */
   ignoredFiles?: string[];
+  /**
+   * Enable Next.js support.
+   *
+   * @default false
+   */
   enableNextSupport?: boolean;
+  /**
+   * Path to the Tailwind CSS configuration file.
+   *
+   * @default "app/tailwind.css"
+   */
   tailwindcssConfigPath?: string;
+  /**
+   * Enable anti-slop rules that reject low-evidence TypeScript and JavaScript patterns.
+   *
+   * @default false
+   */
+  antislop?: boolean;
 }
 
 export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConfigItem[]) {
@@ -158,8 +181,21 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
       },
     },
     { ignores: [...(config?.ignoredFiles || [])] },
+    ...(config?.antislop
+      ? [
+          {
+            name: "totominc/anti-slop",
+            files: [GLOB_SRC],
+            plugins: {
+              "anti-slop": antiSlopPlugin,
+            },
+            rules: { ...antiSlopRules },
+          } satisfies TypedFlatConfigItem,
+        ]
+      : []),
     ...userConfigs,
   );
 }
 
+export { antiSlopPlugin, antiSlopRules };
 export { GLOB_JSX, GLOB_SRC, GLOB_TS, GLOB_TSX };
