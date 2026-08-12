@@ -1,5 +1,9 @@
-import { createRule } from "../create-rule";
-import { parameterAnnotation, parameterName, parameterOwnerListeners } from "../shared/parameters";
+import { createRule } from "../../create-rule";
+import {
+  parameterAnnotation,
+  parameterName,
+  parameterOwnerListeners,
+} from "../../shared/parameters";
 
 /**
  * Disallow unknown inputs except explicitly named error-cause enrichment.

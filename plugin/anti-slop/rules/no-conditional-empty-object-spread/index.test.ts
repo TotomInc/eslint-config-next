@@ -1,5 +1,5 @@
-import { noConditionalEmptyObjectSpreadRule } from "../../plugin/anti-slop/rules/no-conditional-empty-object-spread";
-import { ruleTester } from "./rule-tester";
+import { noConditionalEmptyObjectSpreadRule } from ".";
+import { ruleTester } from "../../rule-tester";
 
 const error = { messageId: "avoid" as const };
 

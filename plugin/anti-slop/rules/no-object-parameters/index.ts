@@ -1,7 +1,11 @@
 import type { TSESTree } from "@typescript-eslint/utils";
 
-import { createRule } from "../create-rule";
-import { parameterAnnotation, parameterName, parameterOwnerListeners } from "../shared/parameters";
+import { createRule } from "../../create-rule";
+import {
+  parameterAnnotation,
+  parameterName,
+  parameterOwnerListeners,
+} from "../../shared/parameters";
 
 /**
  * Ban the broad object type on function inputs, including local aliases to object.

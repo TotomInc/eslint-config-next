@@ -91,15 +91,15 @@ Add VSCode settings to your `.vscode/settings.json`:
 
 ## Anti-slop rules
 
-When `antislop: true`, every rule below is enabled as an error. They are an ESLint port of [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop).
+When `antislop: true`, every rule below is enabled as an error. They are an ESLint port of [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop). Each rule folder has usage notes, do/don't examples, and room for future options.
 
-- `anti-slop/no-chained-type-assertions` — rejects nested type assertions that fabricate evidence.
-- `anti-slop/no-conditional-empty-object-spread` — rejects conditional spreads that use `{}` to omit fields.
-- `anti-slop/no-known-value-widening` — rejects explicit broad target types that discard known value evidence.
-- `anti-slop/no-object-parameters` — rejects the broad `object` type on function inputs.
-- `anti-slop/no-runtime-typeof` — requires boundary parsing instead of ad hoc `typeof` narrowing.
-- `anti-slop/no-shape-in-symbol-names` — rejects `shape` in symbol names.
-- `anti-slop/no-unknown-parameters` — rejects `unknown` inputs except the explicit `cause` convention.
-- `anti-slop/no-unknown-type-aliases` — rejects aliases that merely conceal `unknown`.
-- `anti-slop/no-unsafe-dictionary-type` — rejects dictionary value contracts based on `unknown`, `any`, `object`, `{}`, and semantic equivalents.
-- `anti-slop/no-widen-then-assert` — rejects local flows that widen known values and later assert them back.
+- [`anti-slop/no-chained-type-assertions`](./plugin/anti-slop/rules/no-chained-type-assertions/README.md) — rejects nested type assertions that fabricate evidence.
+- [`anti-slop/no-conditional-empty-object-spread`](./plugin/anti-slop/rules/no-conditional-empty-object-spread/README.md) — rejects conditional spreads that use `{}` to omit fields.
+- [`anti-slop/no-known-value-widening`](./plugin/anti-slop/rules/no-known-value-widening/README.md) — rejects explicit broad target types that discard known value evidence.
+- [`anti-slop/no-object-parameters`](./plugin/anti-slop/rules/no-object-parameters/README.md) — rejects the broad `object` type on function inputs.
+- [`anti-slop/no-runtime-typeof`](./plugin/anti-slop/rules/no-runtime-typeof/README.md) — requires boundary parsing instead of ad hoc `typeof` narrowing.
+- [`anti-slop/no-shape-in-symbol-names`](./plugin/anti-slop/rules/no-shape-in-symbol-names/README.md) — rejects `shape` in symbol names.
+- [`anti-slop/no-unknown-parameters`](./plugin/anti-slop/rules/no-unknown-parameters/README.md) — rejects `unknown` inputs except the explicit `cause` convention.
+- [`anti-slop/no-unknown-type-aliases`](./plugin/anti-slop/rules/no-unknown-type-aliases/README.md) — rejects aliases that merely conceal `unknown`.
+- [`anti-slop/no-unsafe-dictionary-type`](./plugin/anti-slop/rules/no-unsafe-dictionary-type/README.md) — rejects dictionary value contracts based on `unknown`, `any`, `object`, `{}`, and semantic equivalents.
+- [`anti-slop/no-widen-then-assert`](./plugin/anti-slop/rules/no-widen-then-assert/README.md) — rejects local flows that widen known values and later assert them back.

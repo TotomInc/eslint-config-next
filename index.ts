@@ -1,4 +1,10 @@
-import antfu, { GLOB_JSX, GLOB_SRC, GLOB_TS, GLOB_TSX } from "@antfu/eslint-config";
+import antfu, {
+  GLOB_JSX,
+  GLOB_MARKDOWN_CODE,
+  GLOB_SRC,
+  GLOB_TS,
+  GLOB_TSX,
+} from "@antfu/eslint-config";
 import type { TypedFlatConfigItem } from "@antfu/eslint-config";
 import eslintPluginBetterTailwindcss from "eslint-plugin-better-tailwindcss";
 import prettier from "eslint-plugin-prettier";
@@ -186,6 +192,7 @@ export async function totominc(config: UserConfig, ...userConfigs: TypedFlatConf
           {
             name: "totominc/anti-slop",
             files: [GLOB_SRC],
+            ignores: [GLOB_MARKDOWN_CODE],
             plugins: {
               "anti-slop": antiSlopPlugin,
             },

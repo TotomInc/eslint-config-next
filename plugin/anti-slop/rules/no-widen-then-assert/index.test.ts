@@ -1,5 +1,5 @@
-import { noWidenThenAssertRule } from "../../plugin/anti-slop/rules/no-widen-then-assert";
-import { ruleTester } from "./rule-tester";
+import { noWidenThenAssertRule } from ".";
+import { ruleTester } from "../../rule-tester";
 
 const error = { messageId: "widenThenAssert" as const };
 

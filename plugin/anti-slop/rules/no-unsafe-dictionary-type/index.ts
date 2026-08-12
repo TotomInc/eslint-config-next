@@ -1,14 +1,14 @@
 import type { TSESTree } from "@typescript-eslint/utils";
 
-import { createRule } from "../create-rule";
-import { ancestor } from "../shared/ancestors";
+import { createRule } from "../../create-rule";
+import { ancestor } from "../../shared/ancestors";
 import {
   classifyUnsafeDictionary,
   classifyUnsafeDictionaryValue,
   createTypeEnvironment,
   typeReferenceName,
-} from "../shared/dictionary-types";
-import type { TypeEnvironment } from "../shared/dictionary-types";
+} from "../../shared/dictionary-types";
+import type { TypeEnvironment } from "../../shared/dictionary-types";
 
 function isTypeNode(node: TSESTree.Node): node is TSESTree.TypeNode {
   return node.type.startsWith("TS") && node.type !== "TSTypeAnnotation";

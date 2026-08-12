@@ -1,5 +1,5 @@
-import { noUnsafeDictionaryTypeRule } from "../../plugin/anti-slop/rules/no-unsafe-dictionary-type";
-import { ruleTester } from "./rule-tester";
+import { noUnsafeDictionaryTypeRule } from ".";
+import { ruleTester } from "../../rule-tester";
 
 const error = { messageId: "unsafeDictionary" as const };
 

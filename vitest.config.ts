@@ -2,7 +2,7 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    include: ["tests/**/*.test.ts"],
-    setupFiles: ["./tests/anti-slop/setup.ts"],
+    include: ["plugin/**/*.test.ts"],
+    setupFiles: ["./plugin/anti-slop/setup.ts"],
   },
 });

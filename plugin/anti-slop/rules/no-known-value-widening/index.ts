@@ -1,15 +1,15 @@
 import { ASTUtils } from "@typescript-eslint/utils";
 import type { TSESLint, TSESTree } from "@typescript-eslint/utils";
 
-import { createRule } from "../create-rule";
-import { ancestor } from "../shared/ancestors";
+import { createRule } from "../../create-rule";
+import { ancestor } from "../../shared/ancestors";
 import {
   classifyWideningTarget,
   createTypeEnvironment,
   isKnownEvidenceExpression,
-} from "../shared/dictionary-types";
-import type { TypeEnvironment, WideningTarget } from "../shared/dictionary-types";
-import { findVariable, variableDeclarator } from "../shared/scope";
+} from "../../shared/dictionary-types";
+import type { TypeEnvironment, WideningTarget } from "../../shared/dictionary-types";
+import { findVariable, variableDeclarator } from "../../shared/scope";
 
 type FunctionExpression =
   TSESTree.ArrowFunctionExpression | TSESTree.FunctionDeclaration | TSESTree.FunctionExpression;

@@ -1,6 +1,6 @@
 import type { TSESTree } from "@typescript-eslint/utils";
 
-import { createRule } from "../create-rule";
+import { createRule } from "../../create-rule";
 
 function referencedAliasName(type: TSESTree.TypeNode): string | null {
   if (type.type !== "TSTypeReference" || type.typeName.type !== "Identifier") {

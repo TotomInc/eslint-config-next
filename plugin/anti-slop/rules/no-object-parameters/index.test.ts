@@ -1,5 +1,5 @@
-import { noObjectParametersRule } from "../../plugin/anti-slop/rules/no-object-parameters";
-import { ruleTester } from "./rule-tester";
+import { noObjectParametersRule } from ".";
+import { ruleTester } from "../../rule-tester";
 
 const error = { messageId: "objectParameter" as const };
 

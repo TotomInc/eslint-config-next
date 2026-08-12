@@ -1,6 +1,6 @@
 import type { TSESTree } from "@typescript-eslint/utils";
 
-import { createRule } from "../create-rule";
+import { createRule } from "../../create-rule";
 
 const FORBIDDEN_SYMBOL_NAME = "shape";
 

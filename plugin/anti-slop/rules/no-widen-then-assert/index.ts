@@ -1,10 +1,10 @@
 import { ASTUtils } from "@typescript-eslint/utils";
 import type { TSESLint, TSESTree } from "@typescript-eslint/utils";
 
-import { createRule } from "../create-rule";
-import { ancestor } from "../shared/ancestors";
-import { typeReferenceName } from "../shared/dictionary-types";
-import { findVariable, variableDeclarator } from "../shared/scope";
+import { createRule } from "../../create-rule";
+import { ancestor } from "../../shared/ancestors";
+import { typeReferenceName } from "../../shared/dictionary-types";
+import { findVariable, variableDeclarator } from "../../shared/scope";
 
 type BroadTypeKind = "top" | "object" | "record";
 

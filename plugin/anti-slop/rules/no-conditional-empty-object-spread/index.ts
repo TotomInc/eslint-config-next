@@ -1,7 +1,7 @@
 import type { TSESTree } from "@typescript-eslint/utils";
 
-import { createRule } from "../create-rule";
-import { ancestor } from "../shared/ancestors";
+import { createRule } from "../../create-rule";
+import { ancestor } from "../../shared/ancestors";
 
 function isEmptyObjectExpression(node: TSESTree.Expression): boolean {
   return node.type === "ObjectExpression" && node.properties.length === 0;

@@ -7,10 +7,7 @@ export default totominc(
     antislop: true,
   },
   {
-    files: [
-      "plugin/anti-slop/rules/no-shape-in-symbol-names.ts",
-      "tests/anti-slop/no-shape-in-symbol-names.test.ts",
-    ],
+    files: ["plugin/anti-slop/rules/no-shape-in-symbol-names/**"],
     rules: {
       "anti-slop/no-shape-in-symbol-names": "off",
     },

@@ -1,4 +1,4 @@
-import { createRule } from "../create-rule";
+import { createRule } from "../../create-rule";
 
 /**
  * Disallow runtime typeof checks that narrow unparsed values instead of decoding them.

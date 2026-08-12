@@ -1,5 +1,5 @@
-import { noKnownValueWideningRule } from "../../plugin/anti-slop/rules/no-known-value-widening";
-import { ruleTester } from "./rule-tester";
+import { noKnownValueWideningRule } from ".";
+import { ruleTester } from "../../rule-tester";
 
 const error = { messageId: "widening" as const };
 const prelude = "type Command = () => void; const startCommand = () => {};";

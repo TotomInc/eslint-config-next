@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { antiSlopPlugin, antiSlopRules } from "../../plugin/anti-slop";
+import { antiSlopPlugin, antiSlopRules } from ".";
 
 describe("anti-slop plugin", () => {
   it("exports every documented rule", () => {

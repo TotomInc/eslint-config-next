@@ -1,5 +1,5 @@
-import { noShapeInSymbolNamesRule } from "../../plugin/anti-slop/rules/no-shape-in-symbol-names";
-import { ruleTester } from "./rule-tester";
+import { noShapeInSymbolNamesRule } from ".";
+import { ruleTester } from "../../rule-tester";
 
 const error = { messageId: "forbiddenSymbolName" as const };
 

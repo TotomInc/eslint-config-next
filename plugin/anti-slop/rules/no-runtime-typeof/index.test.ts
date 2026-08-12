@@ -1,5 +1,5 @@
-import { noRuntimeTypeofRule } from "../../plugin/anti-slop/rules/no-runtime-typeof";
-import { ruleTester } from "./rule-tester";
+import { noRuntimeTypeofRule } from ".";
+import { ruleTester } from "../../rule-tester";
 
 const error = { messageId: "runtimeTypeof" as const };
 

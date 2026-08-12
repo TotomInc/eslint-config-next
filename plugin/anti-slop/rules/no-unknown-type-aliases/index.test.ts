@@ -1,5 +1,5 @@
-import { noUnknownTypeAliasesRule } from "../../plugin/anti-slop/rules/no-unknown-type-aliases";
-import { ruleTester } from "./rule-tester";
+import { noUnknownTypeAliasesRule } from ".";
+import { ruleTester } from "../../rule-tester";
 
 const error = { messageId: "unknownAlias" as const };
 

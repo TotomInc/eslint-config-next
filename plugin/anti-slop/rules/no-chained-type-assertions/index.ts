@@ -1,8 +1,8 @@
 import { ASTUtils } from "@typescript-eslint/utils";
 import type { TSESTree } from "@typescript-eslint/utils";
 
-import { createRule } from "../create-rule";
-import { ancestor } from "../shared/ancestors";
+import { createRule } from "../../create-rule";
+import { ancestor } from "../../shared/ancestors";
 
 function isConstAssertion(node: TSESTree.TSAsExpression | TSESTree.TSTypeAssertion): boolean {
   const { typeAnnotation } = node;

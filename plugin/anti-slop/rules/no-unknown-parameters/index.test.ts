@@ -1,5 +1,5 @@
-import { noUnknownParametersRule } from "../../plugin/anti-slop/rules/no-unknown-parameters";
-import { ruleTester } from "./rule-tester";
+import { noUnknownParametersRule } from ".";
+import { ruleTester } from "../../rule-tester";
 
 const error = { messageId: "unknownParameter" as const };
 
