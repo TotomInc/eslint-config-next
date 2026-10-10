@@ -10,12 +10,13 @@ import type { OptionsConfig, TypedFlatConfigItem } from "@antfu/eslint-config";
 
 import { baseConfig } from "./configs/base";
 import type { Framework } from "./configs/detect";
-import { detectFramework, detectTailwindcss } from "./configs/detect";
+import { detectFramework, detectTailwindcss, detectTurborepo } from "./configs/detect";
 import { javascriptConfig } from "./configs/javascript";
 import { nextjsConfigs } from "./configs/nextjs";
 import { prettierConfig, prettierOptions } from "./configs/prettier";
 import { reactConfigs } from "./configs/react";
 import { tailwindcssConfig } from "./configs/tailwindcss";
+import { turboConfig } from "./configs/turbo";
 import { typeSafetyConfigs } from "./configs/type-safety";
 import { vueConfigs } from "./configs/vue";
 import { antiSlopPlugin, antiSlopRules } from "./plugin/anti-slop";
@@ -59,6 +60,12 @@ export interface Options {
    */
   tailwindcss?: boolean | { entryPoint?: string };
   /**
+   * Turborepo rules (`turbo/no-undeclared-env-vars`). Requires `eslint-plugin-turbo`.
+   *
+   * @default enabled when a `turbo.json` exists in the current directory or a parent one
+   */
+  turbo?: boolean;
+  /**
    * Accessibility rules: `eslint-plugin-jsx-a11y` for React and Next.js,
    * `eslint-plugin-vuejs-accessibility` for Vue.
    *
@@ -99,6 +106,7 @@ export async function totominc(options: Options = {}, ...userConfigs: TypedFlatC
   const typeAware = tsconfigPath !== false;
   const a11y = options.a11y ?? true;
   const tailwindcss = resolveTailwindcss(options.tailwindcss);
+  const turbo = options.turbo ?? detectTurborepo();
 
   const sourceFiles = isVue ? [GLOB_SRC, GLOB_VUE] : [GLOB_SRC];
   const componentFiles = isVue ? [GLOB_VUE] : isReact ? [GLOB_TSX, GLOB_JSX] : [];
@@ -135,6 +143,7 @@ export async function totominc(options: Options = {}, ...userConfigs: TypedFlatC
     ...(tailwindcss !== false && componentFiles.length > 0
       ? [tailwindcssConfig({ files: componentFiles, entryPoint: tailwindcss.entryPoint })]
       : []),
+    ...(turbo ? [turboConfig(sourceFiles)] : []),
     { name: "totominc/ignores", ignores: [...(options.ignores ?? [])] },
     ...(options.antislop === false
       ? []
@@ -153,7 +162,7 @@ export async function totominc(options: Options = {}, ...userConfigs: TypedFlatC
   );
 }
 
-export { detectFramework, detectTailwindcss };
+export { detectFramework, detectTailwindcss, detectTurborepo };
 export { antiSlopPlugin, antiSlopRules, prettierOptions };
 export type { Framework };
 export { GLOB_JSX, GLOB_SRC, GLOB_TS, GLOB_TSX, GLOB_VUE };

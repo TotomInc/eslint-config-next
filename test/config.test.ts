@@ -7,7 +7,7 @@ import { ESLint } from "eslint";
 import { describe, expect, it } from "vitest";
 
 import type { Options } from "../index";
-import { detectFramework, detectTailwindcss, totominc } from "../index";
+import { detectFramework, detectTailwindcss, detectTurborepo, totominc } from "../index";
 
 const fixture = (name: string) => fileURLToPath(new URL(`./fixtures/${name}`, import.meta.url));
 
@@ -58,6 +58,43 @@ describe("detection", () => {
     expect(detectTailwindcss(project({ tailwindcss: "4.3.3" }, ["src/app/globals.css"]))).toEqual({
       entryPoint: "src/app/globals.css",
     });
+  });
+});
+
+describe("turborepo", () => {
+  const root = fixture("turborepo");
+
+  it("detects `turbo.json` from a workspace package, up to the git root", () => {
+    expect(detectTurborepo(root)).toBe(true);
+    expect(detectTurborepo(join(root, "apps/web"))).toBe(true);
+
+    const repository = project({});
+
+    mkdirSync(join(repository, ".git"));
+    mkdirSync(join(repository, "packages/app"), { recursive: true });
+
+    expect(detectTurborepo(join(repository, "packages/app"))).toBe(false);
+  });
+
+  it("reports environment variables missing from `turbo.json`", async () => {
+    const eslint = new ESLint({
+      cwd: root,
+      overrideConfigFile: true,
+      overrideConfig: await totominc({ framework: "none", tsconfigPath: false, turbo: true }),
+    });
+    const [result] = await eslint.lintFiles([join(root, "apps/web/env.ts")]);
+    const turboMessages = (result?.messages ?? []).filter(
+      (message) => message.ruleId === "turbo/no-undeclared-env-vars",
+    );
+
+    expect(turboMessages).toHaveLength(1);
+    expect(turboMessages[0]?.message).toContain("UNDECLARED_TOKEN");
+  });
+
+  it("is not registered outside of a Turborepo", async () => {
+    const config = await totominc({ framework: "none" });
+
+    expect(config.some((item) => item.name === "totominc/turbo")).toBe(false);
   });
 });
 

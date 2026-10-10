@@ -12,6 +12,12 @@ npm i -D @totominc/eslint-config-next@4 eslint@10
 
 `eslint-plugin-jsx-a11y` and `eslint-plugin-vuejs-accessibility` are now bundled. If you installed them yourself, you can uninstall them.
 
+In a Turborepo (a `turbo.json` in the current or a parent directory), Turborepo rules are enabled automatically and require `eslint-plugin-turbo`:
+
+```bash
+npm i -D eslint-plugin-turbo
+```
+
 ### 2. Update the options
 
 | v3                                     | v4                                                            |
@@ -24,6 +30,7 @@ npm i -D @totominc/eslint-config-next@4 eslint@10
 | _(Tailwind CSS always on)_             | `tailwindcss: false` to disable, detected from `tailwindcss`  |
 | `antislop: true`                       | Remove it: on by default. Use `antislop: false` to opt out    |
 | —                                      | `a11y: false` to opt out of the accessibility rules           |
+| —                                      | `turbo: false` to opt out of the Turborepo rules              |
 | —                                      | `strictTypeSafety: false` to opt out of the type-safety rules |
 | `UserConfig` type                      | `Options` type                                                |
 

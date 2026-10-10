@@ -18,7 +18,7 @@ import { totominc } from "@totominc/eslint-config-next";
 export default totominc();
 ```
 
-That's it: the framework (Next.js, Vue/Nuxt, React or none) and Tailwind CSS are detected from the dependencies of your `package.json`. Set them explicitly when detection is not enough, e.g. in a monorepo:
+That's it: the framework (Next.js, Vue/Nuxt, React or none) and Tailwind CSS are detected from the dependencies of your `package.json`, and Turborepo from a `turbo.json` in the current or a parent directory. Set them explicitly when detection is not enough, e.g. in a monorepo:
 
 ```js
 export default totominc({
@@ -48,6 +48,7 @@ export default totominc(
 | `tsconfigPath`     | `"./tsconfig.json"` | `tsconfig.json` used for type-aware rules, or `false` to disable type-aware linting.                                              |
 | `strictTypeSafety` | `true`              | Stricter type-safety rules, see [Type safety](#type-safety).                                                                      |
 | `tailwindcss`      | detected            | `true`, `false` or `{ entryPoint }`. Enabled when `tailwindcss` is a dependency, entry point detected among common CSS locations. |
+| `turbo`            | detected            | `turbo/no-undeclared-env-vars`, enabled when a `turbo.json` exists in the current directory or a parent one (up to the git root). |
 | `a11y`             | `true`              | `eslint-plugin-jsx-a11y` (React, Next.js) or `eslint-plugin-vuejs-accessibility` (Vue). Both are bundled.                         |
 | `antislop`         | `true`              | [Anti-slop rules](#anti-slop-rules).                                                                                              |
 | `ignores`          | `[]`                | Glob patterns of files to ignore, on top of `.gitignore` and antfu's defaults.                                                    |
@@ -62,6 +63,18 @@ export default totominc(
 - `jsx-a11y/alt-text` also checks `next/image`'s `<Image>`.
 
 There is no need to install `eslint-config-next`: it would register a second React plugin (`eslint-plugin-react`), a second import plugin and a Babel parser on top of antfu's `@eslint-react`, `import-lite` and `typescript-eslint` setup. React Hooks and React Compiler rules (`rules-of-hooks`, `exhaustive-deps`, `purity`, `immutability`, `refs`, `set-state-in-render`, ...) come from `@eslint-react`.
+
+### Turborepo
+
+In a Turborepo, `turbo/no-undeclared-env-vars` reports environment variables read in code but missing from `turbo.json`: Turborepo does not include them in the task hash, so a change in their value would serve a stale cached build.
+
+The rule comes from `eslint-plugin-turbo`, an optional peer dependency (it requires the `turbo` binary, which only Turborepo projects install). Install it once at the root of the monorepo:
+
+```bash
+npm i -D eslint-plugin-turbo
+```
+
+It is enabled automatically, in the root and in every workspace package, as soon as a `turbo.json` is found. Use `turbo: false` to opt out.
 
 ### React
 

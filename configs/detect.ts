@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import process from "node:process";
 
 export type Framework = "next" | "none" | "react" | "vue";
@@ -75,4 +75,27 @@ export function detectTailwindcss(cwd = process.cwd()): { entryPoint?: string } 
   const entryPoint = TAILWINDCSS_ENTRY_POINTS.find((path) => existsSync(join(cwd, path)));
 
   return entryPoint === undefined ? {} : { entryPoint };
+}
+
+/**
+ * Detect a Turborepo by looking for `turbo.json` from the current working directory up to the git
+ * root, so it also works when ESLint runs inside a workspace package.
+ */
+export function detectTurborepo(cwd = process.cwd()): boolean {
+  let directory = cwd;
+  let parent = dirname(directory);
+
+  while (
+    !existsSync(join(directory, "turbo.json")) &&
+    !existsSync(join(directory, "turbo.jsonc"))
+  ) {
+    if (existsSync(join(directory, ".git")) || parent === directory) {
+      return false;
+    }
+
+    directory = parent;
+    parent = dirname(directory);
+  }
+
+  return true;
 }

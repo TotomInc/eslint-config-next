@@ -1,7 +1,7 @@
 {
   "name": "@totominc/eslint-config-next",
   "type": "module",
-  "version": "4.0.0",
+  "version": "3.0.0",
   "description": "Strict, type-safe ESLint config for React, Next.js, Vue and TypeScript projects, built on @antfu/eslint-config.",
   "author": "Thomas Cazade <cazade.thomas@gmail.com>",
   "license": "GPL-3",
@@ -44,7 +44,13 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "eslint": "^10.2.0"
+    "eslint": "^10.2.0",
+    "eslint-plugin-turbo": "^2.11.7"
+  },
+  "peerDependenciesMeta": {
+    "eslint-plugin-turbo": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@antfu/eslint-config": "9.5.1",
@@ -66,9 +72,11 @@
     "@typescript-eslint/parser": "8.71.1",
     "@typescript-eslint/rule-tester": "8.71.1",
     "eslint": "10.12.0",
+    "eslint-plugin-turbo": "2.11.7",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "tsup": "8.5.1",
+    "turbo": "2.11.7",
     "typescript": "6.0.3",
     "vitest": "5.0.3"
   },
