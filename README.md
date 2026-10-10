@@ -1,5 +1,9 @@
 # eslint-config-next
 
+Strict, type-safe ESLint flat config for React, Next.js, Vue and plain TypeScript projects, built on [`@antfu/eslint-config`](https://github.com/antfu/eslint-config) with Prettier formatting.
+
+> Upgrading from v3? Read the [migration guide](./MIGRATION.md).
+
 ## Installation
 
 ```bash
@@ -14,28 +18,20 @@ import { totominc } from "@totominc/eslint-config-next";
 export default totominc();
 ```
 
-Pick the framework of your project with `framework` (defaults to `"react"`):
+That's it: the framework (Next.js, Vue/Nuxt, React or none) and Tailwind CSS are detected from the dependencies of your `package.json`. Set them explicitly when detection is not enough, e.g. in a monorepo:
 
 ```js
-// Next.js (App Router or Pages Router).
-export default totominc({ framework: "next" });
-```
-
-```js
-// Vue 3 (`<script setup lang="ts">` SFCs).
-export default totominc({ framework: "vue" });
-```
-
-```js
-// Plain TypeScript (Node.js, libraries, CLIs): no React/Vue/Tailwind rules.
-export default totominc({ framework: "none", type: "lib" });
+export default totominc({
+  framework: "next",
+  tailwindcss: { entryPoint: "src/app/globals.css" },
+});
 ```
 
 Extra flat config items can be passed after the options, and win over everything else:
 
 ```js
 export default totominc(
-  { framework: "next" },
+  { framework: "vue" },
   {
     files: ["scripts/**"],
     rules: { "no-console": "off" },
@@ -45,20 +41,17 @@ export default totominc(
 
 ### Options
 
-| Option                  | Default             | Description                                                                                                                                                          |
-| ----------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `framework`             | `"react"`           | `"react"`, `"next"`, `"vue"` or `"none"`.                                                                                                                            |
-| `type`                  | `"app"`             | `"lib"` also requires explicit return types on functions.                                                                                                            |
-| `tsconfigPath`          | `"./tsconfig.json"` | `tsconfig.json` used for type-aware rules, or `false` to disable type-aware linting.                                                                                 |
-| `strictTypeSafety`      | `true`              | Stricter type-safety rules, see [Type safety](#type-safety).                                                                                                         |
-| `tailwindcssConfigPath` | `"app/globals.css"` | Tailwind CSS entry point, or `false` to disable Tailwind CSS rules.                                                                                                  |
-| `a11y`                  | `false`             | Accessibility rules. Requires `eslint-plugin-jsx-a11y` (React, Next.js) or `eslint-plugin-vuejs-accessibility` (Vue). With Next.js, `<Image>` is checked for `alt`. |
-| `antislop`              | `false`             | [Anti-slop rules](#anti-slop-rules).                                                                                                                                 |
-| `ignoredFiles`          | `[]`                | Glob patterns of files to ignore.                                                                                                                                    |
-| `antfu`                 | `{}`                | Escape hatch forwarded to [`@antfu/eslint-config`](https://github.com/antfu/eslint-config) (e.g. `{ unocss: true }`).                                                |
-| `enableNextSupport`     | `false`             | **Deprecated**, use `framework: "next"`.                                                                                                                             |
-
-> `eslint-plugin-jsx-a11y` does not declare ESLint 10 in its peer range yet, install it with `npm i -D eslint-plugin-jsx-a11y --legacy-peer-deps` (it works fine with ESLint 10).
+| Option             | Default             | Description                                                                                                                       |
+| ------------------ | ------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `framework`        | detected            | `"next"`, `"vue"`, `"react"` or `"none"`. Detected from `next`, then `vue`/`nuxt`, then `react` in `package.json`.                |
+| `type`             | `"app"`             | `"lib"` also requires explicit return types on functions.                                                                         |
+| `tsconfigPath`     | `"./tsconfig.json"` | `tsconfig.json` used for type-aware rules, or `false` to disable type-aware linting.                                              |
+| `strictTypeSafety` | `true`              | Stricter type-safety rules, see [Type safety](#type-safety).                                                                      |
+| `tailwindcss`      | detected            | `true`, `false` or `{ entryPoint }`. Enabled when `tailwindcss` is a dependency, entry point detected among common CSS locations. |
+| `a11y`             | `true`              | `eslint-plugin-jsx-a11y` (React, Next.js) or `eslint-plugin-vuejs-accessibility` (Vue). Both are bundled.                         |
+| `antislop`         | `true`              | [Anti-slop rules](#anti-slop-rules).                                                                                              |
+| `ignores`          | `[]`                | Glob patterns of files to ignore, on top of `.gitignore` and antfu's defaults.                                                    |
+| `antfu`            | `{}`                | Escape hatch forwarded to [`@antfu/eslint-config`](https://github.com/antfu/eslint-config) (e.g. `{ unocss: true }`).             |
 
 ### Next.js
 
@@ -66,9 +59,15 @@ export default totominc(
 
 - ignores `out/`, `build/` and `next-env.d.ts` (`.next/` is already ignored by antfu),
 - `process.env` without `import process from "node:process"`,
-- with `a11y: true`, `jsx-a11y/alt-text` also checks `next/image`'s `<Image>`.
+- `jsx-a11y/alt-text` also checks `next/image`'s `<Image>`.
 
-There is no need to install `eslint-config-next`: it would register a second React plugin (`eslint-plugin-react`), a second import plugin and a Babel parser on top of antfu's `@eslint-react`, `import-lite` and `typescript-eslint` setup. React Hooks and React Compiler rules (`rules-of-hooks`, `exhaustive-deps`, `purity`, `set-state-in-render`, ...) come from `@eslint-react`.
+There is no need to install `eslint-config-next`: it would register a second React plugin (`eslint-plugin-react`), a second import plugin and a Babel parser on top of antfu's `@eslint-react`, `import-lite` and `typescript-eslint` setup. React Hooks and React Compiler rules (`rules-of-hooks`, `exhaustive-deps`, `purity`, `immutability`, `refs`, `set-state-in-render`, ...) come from `@eslint-react`.
+
+### React
+
+- every `@eslint-react` recommended rule is an error (upstream ships many as warnings),
+- React Compiler rules (`globals`, `immutability`, `refs`) and the `strict` preset rules antfu leaves out: unused props and state, unstable context values and default props, `<button>` without `type`, `<iframe>` without `sandbox`, `target="_blank"` without `rel`, class components,
+- props sorted with `perfectionist/sort-jsx-props` (`key`/`ref` first, callbacks last), self-closing components.
 
 ### Vue
 
@@ -78,18 +77,22 @@ There is no need to install `eslint-config-next`: it would register a second Rea
 - attributes are sorted alphabetically, events last (`vue/attributes-order`), like `perfectionist/sort-jsx-props`,
 - every element without content self-closes (`vue/html-self-closing`), like `style/jsx-self-closing-comp`,
 - only typed `<script setup lang="ts">`: `vue/block-lang`, `vue/component-api-style`, type-based `defineProps`/`defineEmits`, typed `ref()`, explicit slots,
-- dead code: unused props, emits and template refs are reported,
+- dead code: unused props, emits, components and template refs, undefined properties in templates,
+- template expressions follow the script rules (`eqeqeq`, no implicit coercion, template literals),
 - Tailwind CSS class order and validation in templates.
 
 ### Type safety
 
 With `strictTypeSafety` (default), on top of antfu's type-aware rules:
 
-- `any`, non-null assertions (`!`) and `<T>value` / `{} as T` assertions are errors,
-- unnecessary conditions, `||` instead of `??`, missing optional chaining, unnecessary type arguments/parameters/conversions,
+- **no escape hatches**: `any`, non-null assertions (`!`), unsafe `as` assertions (`ts/no-unsafe-type-assertion`) and `<T>value` / `{} as T` are errors: parse or narrow values instead of asserting them,
+- **explicit conditions**: `ts/strict-boolean-expressions` rejects strings and numbers in conditions (`""`, `0` and `NaN` are values, not missing ones), `no-implicit-coercion` rejects `!!value` and `+value`,
+- **no TypeScript-only runtime syntax**: enums, namespaces and parameter properties are rejected, so code runs with Node.js type stripping (`erasableSyntaxOnly`),
+- unnecessary conditions, `||` instead of `??`, missing optional chaining, unnecessary type arguments/parameters/conversions, mutable private members that are never reassigned,
 - throwing or rejecting non-`Error` values, `async` functions without `await`, `switch` over unions that are not exhaustive,
-- deprecated APIs are warnings,
-- React: props declared but never used (`react/no-unused-props`), unstable context values and default props, `<button>` without `type`, `target="_blank"` without `rel`.
+- deprecated APIs are warnings.
+
+Language rules also prefer modern built-ins (`Array#at`, `Array#flatMap`, `structuredClone`, `Object.hasOwn`, `for…of`, ...) over hand-written equivalents.
 
 Type-aware rules are much more effective with a strict `tsconfig.json`:
 
@@ -99,7 +102,8 @@ Type-aware rules are much more effective with a strict `tsconfig.json`:
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "erasableSyntaxOnly": true
   }
 }
 ```
@@ -173,7 +177,7 @@ Add VSCode settings to your `.vscode/settings.json`:
 
 ## Anti-slop rules
 
-When `antislop: true`, every rule below is enabled as an error. They are an ESLint port of [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop). Each rule folder has usage notes, do/don't examples, and room for future options.
+Every rule below is enabled as an error (disable them all with `antislop: false`). They are an ESLint port of [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop). Each rule folder has usage notes, do/don't examples, and room for future options.
 
 - [`anti-slop/no-chained-type-assertions`](./plugin/anti-slop/rules/no-chained-type-assertions/README.md) — rejects nested type assertions that fabricate evidence.
 - [`anti-slop/no-conditional-empty-object-spread`](./plugin/anti-slop/rules/no-conditional-empty-object-spread/README.md) — rejects conditional spreads that use `{}` to omit fields.

@@ -1,19 +1,22 @@
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { ESLint } from "eslint";
 import { describe, expect, it } from "vitest";
 
-import type { UserConfig } from "../index";
-import { totominc } from "../index";
+import type { Options } from "../index";
+import { detectFramework, detectTailwindcss, totominc } from "../index";
 
 const fixture = (name: string) => fileURLToPath(new URL(`./fixtures/${name}`, import.meta.url));
 
-async function lint(config: UserConfig, file: string) {
+async function lint(options: Options, file: string) {
   const eslint = new ESLint({
     overrideConfigFile: true,
     overrideConfig: await totominc({
-      tailwindcssConfigPath: "./playground/tailwind.css",
-      ...config,
+      tailwindcss: { entryPoint: "./playground/tailwind.css" },
+      ...options,
     }),
   });
   const [result] = await eslint.lintFiles([fixture(file)]);
@@ -21,11 +24,42 @@ async function lint(config: UserConfig, file: string) {
   return result?.messages ?? [];
 }
 
-async function ruleIds(config: UserConfig, file: string) {
-  const messages = await lint(config, file);
+async function ruleIds(options: Options, file: string) {
+  const messages = await lint(options, file);
 
   return new Set(messages.map((message) => message.ruleId));
 }
+
+function project(dependencies: Record<string, string>, files: string[] = []) {
+  const cwd = mkdtempSync(join(tmpdir(), "totominc-"));
+
+  writeFileSync(join(cwd, "package.json"), JSON.stringify({ dependencies }));
+
+  for (const file of files) {
+    mkdirSync(join(cwd, file, ".."), { recursive: true });
+    writeFileSync(join(cwd, file), "");
+  }
+
+  return cwd;
+}
+
+describe("detection", () => {
+  it("detects the framework from direct dependencies", () => {
+    expect(detectFramework(project({ next: "16.4.0", react: "19.3.0" }))).toBe("next");
+    expect(detectFramework(project({ nuxt: "4.0.0" }))).toBe("vue");
+    expect(detectFramework(project({ vue: "3.5.0" }))).toBe("vue");
+    expect(detectFramework(project({ react: "19.3.0" }))).toBe("react");
+    expect(detectFramework(project({ zod: "4.0.0" }))).toBe("none");
+  });
+
+  it("detects Tailwind CSS and its entry point", () => {
+    expect(detectTailwindcss(project({ react: "19.3.0" }))).toBe(false);
+    expect(detectTailwindcss(project({ tailwindcss: "4.3.3" }))).toEqual({});
+    expect(detectTailwindcss(project({ tailwindcss: "4.3.3" }, ["src/app/globals.css"]))).toEqual({
+      entryPoint: "src/app/globals.css",
+    });
+  });
+});
 
 describe("totominc", () => {
   it("enables strict type-safety and React rules", async () => {
@@ -34,6 +68,23 @@ describe("totominc", () => {
     expect(rules).toContain("ts/no-explicit-any");
     expect(rules).toContain("ts/no-non-null-assertion");
     expect(rules).toContain("react/dom-no-missing-button-type");
+  });
+
+  it("enables type-aware and language rules", async () => {
+    const rules = await ruleIds({ framework: "none" }, "unsafe.ts");
+
+    expect(rules).toContain("ts/no-unsafe-type-assertion");
+    expect(rules).toContain("ts/strict-boolean-expressions");
+    expect(rules).toContain("no-restricted-syntax");
+    expect(rules).toContain("no-implicit-coercion");
+    expect(rules).toContain("unicorn/no-for-loop");
+  });
+
+  it("enables accessibility rules by default", async () => {
+    expect(await ruleIds({ framework: "react" }, "react-a11y.tsx")).toContain("jsx-a11y/alt-text");
+    expect(await ruleIds({ framework: "react", a11y: false }, "react-a11y.tsx")).not.toContain(
+      "jsx-a11y/alt-text",
+    );
   });
 
   it("reports no error on a well-formatted React component", async () => {
@@ -51,16 +102,11 @@ describe("totominc", () => {
     expect(rules).not.toContain("ts/no-non-null-assertion");
   });
 
-  it("enables Next.js rules", async () => {
+  it("enables Next.js rules, and checks `alt` on `next/image`", async () => {
     const rules = await ruleIds({ framework: "next" }, "next-page.tsx");
 
     expect(rules).toContain("next/no-img-element");
-  });
-
-  it("keeps supporting the deprecated `enableNextSupport` option", async () => {
-    const rules = await ruleIds({ enableNextSupport: true }, "next-page.tsx");
-
-    expect(rules).toContain("next/no-img-element");
+    expect(rules).toContain("jsx-a11y/alt-text");
   });
 
   it("does not register React rules for plain TypeScript projects", async () => {
@@ -69,6 +115,15 @@ describe("totominc", () => {
 
     expect(ruleNames.some((name) => name.startsWith("react/"))).toBe(false);
     expect(await ruleIds({ framework: "none" }, "plain.ts")).toContain("ts/no-non-null-assertion");
+  });
+
+  it("enables anti-slop rules by default", async () => {
+    expect(await ruleIds({ framework: "none" }, "unsafe.ts")).toContain(
+      "anti-slop/no-runtime-typeof",
+    );
+    expect(await ruleIds({ framework: "none", antislop: false }, "unsafe.ts")).not.toContain(
+      "anti-slop/no-runtime-typeof",
+    );
   });
 
   it("reports no error on a well-formatted Vue SFC", async () => {

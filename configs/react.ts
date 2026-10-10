@@ -1,5 +1,17 @@
 import { GLOB_JSX, GLOB_MARKDOWN, GLOB_TS, GLOB_TSX } from "@antfu/eslint-config";
 import type { TypedFlatConfigItem } from "@antfu/eslint-config";
+import pluginReact from "@eslint-react/eslint-plugin";
+
+/**
+ * `@eslint-react` recommended rules that are warnings upstream, promoted to errors: a warning that
+ * nobody fixes is noise, a real issue deserves to fail CI.
+ */
+const recommendedRulesAsErrors = Object.fromEntries(
+  Object.keys(pluginReact.configs.recommended.rules ?? {}).map((name) => [
+    name.replace("@eslint-react/", "react/"),
+    "error",
+  ]),
+) satisfies TypedFlatConfigItem["rules"];
 
 export function reactConfigs(options: { typeAware: boolean }): TypedFlatConfigItem[] {
   return [
@@ -27,16 +39,25 @@ export function reactConfigs(options: { typeAware: boolean }): TypedFlatConfigIt
           },
         ],
 
-        // Stale closures are bugs, not style issues.
-        "react/exhaustive-deps": "error",
+        ...recommendedRulesAsErrors,
+
+        // React Compiler rules not in the recommended preset.
+        "react/globals": "error",
+        "react/immutability": "error",
+        "react/refs": "error",
 
         // Rules from `@eslint-react` "strict" preset that antfu leaves out.
         "react/dom-no-missing-button-type": "error",
+        "react/dom-no-missing-iframe-sandbox": "error",
         "react/dom-no-unsafe-target-blank": "error",
         "react/jsx-no-useless-fragment": "error",
         "react/no-class-component": "error",
+        "react/no-duplicate-key": "error",
+        "react/no-misused-capture-owner-stack": "error",
+        "react/no-missing-context-display-name": "error",
         "react/no-unstable-context-value": "error",
         "react/no-unstable-default-props": "error",
+        "react/no-unused-state": "error",
 
         // Allow using `process.env` without `require("process")`.
         "node/prefer-global/process": "off",
@@ -51,6 +72,8 @@ export function reactConfigs(options: { typeAware: boolean }): TypedFlatConfigIt
             rules: {
               // Props declared in the component type but never read are dead API surface.
               "react/no-unused-props": "error",
+              // `key` passed through a spread object is invisible to React.
+              "react/no-implicit-key": "error",
             },
           } satisfies TypedFlatConfigItem,
         ]

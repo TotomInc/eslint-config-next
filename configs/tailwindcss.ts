@@ -3,17 +3,13 @@ import eslintPluginBetterTailwindcss from "eslint-plugin-better-tailwindcss";
 
 export function tailwindcssConfig(options: {
   files: string[];
-  entryPoint: string;
+  entryPoint?: string;
 }): TypedFlatConfigItem {
   return {
     ...eslintPluginBetterTailwindcss.configs.recommended,
     name: "totominc/tailwindcss",
     files: options.files,
-    settings: {
-      "better-tailwindcss": {
-        entryPoint: options.entryPoint,
-      },
-    },
+    settings: { "better-tailwindcss": { entryPoint: options.entryPoint } },
     rules: {
       ...eslintPluginBetterTailwindcss.configs.recommended.rules,
       "better-tailwindcss/enforce-consistent-class-order": [

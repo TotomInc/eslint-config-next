@@ -4,10 +4,9 @@ import { totominc } from "./dist/index.js";
 export default totominc(
   {
     framework: "react",
-    tailwindcssConfigPath: "./playground/tailwind.css",
-    antislop: true,
+    tailwindcss: { entryPoint: "./playground/tailwind.css" },
     // Fixtures intentionally contain violations.
-    ignoredFiles: ["test/fixtures/**"],
+    ignores: ["test/fixtures/**"],
   },
   {
     files: ["plugin/anti-slop/rules/no-shape-in-symbol-names/**"],

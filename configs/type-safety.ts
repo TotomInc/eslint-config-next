@@ -6,6 +6,10 @@ import type { TypedFlatConfigItem } from "@antfu/eslint-config";
  */
 const syntacticRules = {
   "ts/no-explicit-any": ["error", { fixToUnknown: false, ignoreRestArgs: false }],
+  "ts/no-inferrable-types": "error",
+  "ts/no-useless-empty-export": "error",
+  "ts/prefer-for-of": "error",
+  "ts/prefer-function-type": "error",
   "ts/no-non-null-assertion": "error",
   "ts/consistent-type-assertions": [
     "error",
@@ -15,7 +19,8 @@ const syntacticRules = {
 
 /**
  * Rules from `typescript-eslint`'s `strict-type-checked` and `stylistic-type-checked` presets that
- * antfu does not enable on top of its own type-aware set.
+ * antfu does not enable, plus `no-unsafe-type-assertion` and a stricter `strict-boolean-expressions`:
+ * values must be narrowed or parsed, not asserted or coerced.
  */
 const typeAwareRules = {
   "ts/consistent-type-exports": "error",
@@ -34,6 +39,7 @@ const typeAwareRules = {
   "ts/no-unnecessary-type-arguments": "error",
   "ts/no-unnecessary-type-conversion": "error",
   "ts/no-unnecessary-type-parameters": "error",
+  "ts/no-unsafe-type-assertion": "error",
   "ts/no-unsafe-enum-comparison": "error",
   "ts/no-unsafe-unary-minus": "error",
   "ts/only-throw-error": "error",
@@ -42,11 +48,26 @@ const typeAwareRules = {
   "ts/prefer-nullish-coalescing": "error",
   "ts/prefer-optional-chain": "error",
   "ts/prefer-promise-reject-errors": "error",
+  "ts/prefer-readonly": "error",
   "ts/prefer-reduce-type-parameter": "error",
   "ts/prefer-return-this-type": "error",
   "ts/prefer-string-starts-ends-with": "error",
   "ts/require-array-sort-compare": ["error", { ignoreStringArrays: true }],
+  "ts/related-getter-setter-pairs": "error",
   "ts/require-await": "error",
+  // `0`, `""` and `NaN` are valid values, not missing ones: compare them explicitly.
+  "ts/strict-boolean-expressions": [
+    "error",
+    {
+      allowAny: false,
+      allowNullableBoolean: true,
+      allowNullableNumber: false,
+      allowNullableObject: true,
+      allowNullableString: false,
+      allowNumber: false,
+      allowString: false,
+    },
+  ],
   "ts/switch-exhaustiveness-check": [
     "error",
     { considerDefaultExhaustiveForUnions: true, requireDefaultForNonUnion: true },

@@ -107,11 +107,10 @@ export function createTypeEnvironment(program: TSESTree.Program): TypeEnvironmen
 
     if (
       (declaration?.type === "ClassDeclaration" || declaration?.type === "FunctionDeclaration") &&
-      declaration.id !== null
+      declaration.id !== null &&
+      BUILT_INS.has(declaration.id.name)
     ) {
-      if (BUILT_INS.has(declaration.id.name)) {
-        shadowedBuiltIns.add(declaration.id.name);
-      }
+      shadowedBuiltIns.add(declaration.id.name);
     }
   }
 
@@ -170,7 +169,7 @@ function isEffectivelyEmptyMember(member: TSESTree.TypeElement): boolean {
 }
 
 function isEffectivelyEmptyTypeLiteral(type: TSESTree.TSTypeLiteral): boolean {
-  return type.members.length === 0 || type.members.every(isEffectivelyEmptyMember);
+  return type.members.every(isEffectivelyEmptyMember);
 }
 
 function isEffectivelyEmptyInterface(
@@ -182,10 +181,7 @@ function isEffectivelyEmptyInterface(
 
   const [type] = declarations;
 
-  return (
-    type?.extends.length === 0 &&
-    (type.body.body.length === 0 || type.body.body.every(isEffectivelyEmptyMember))
-  );
+  return type?.extends.length === 0 && type.body.body.every(isEffectivelyEmptyMember);
 }
 
 function resolvedSubstitutionArgument(

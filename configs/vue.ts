@@ -47,6 +47,12 @@ export function vueConfigs(): TypedFlatConfigItem[] {
         "vue/no-unused-emit-declarations": "error",
         "vue/no-unused-properties": "error",
         "vue/no-unused-refs": "error",
+        "vue/no-unused-components": "error",
+        "vue/no-undef-properties": "error",
+        "vue/no-template-shadow": "error",
+        "vue/no-multiple-objects-in-class": "error",
+        "vue/no-static-inline-styles": "error",
+        "vue/no-useless-v-bind": "error",
         "vue/no-root-v-if": "error",
         "vue/no-template-target-blank": "error",
         "vue/html-button-has-type": "error",
@@ -57,6 +63,18 @@ export function vueConfigs(): TypedFlatConfigItem[] {
         "vue/prefer-true-attribute-shorthand": "error",
         "vue/v-on-handler-style": ["error", ["method", "inline-function"]],
         "vue/no-duplicate-class-names": "error",
+
+        // Same as the script rules, inside template expressions.
+        "vue/eqeqeq": ["error", "always", { null: "ignore" }],
+        "vue/no-implicit-coercion": "error",
+        "vue/object-shorthand": ["error", "always", { avoidQuotes: true }],
+        "vue/prefer-template": "error",
+        "vue/no-restricted-syntax": [
+          "error",
+          "DebuggerStatement",
+          "LabeledStatement",
+          "WithStatement",
+        ],
       },
     },
   ];

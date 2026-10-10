@@ -4,6 +4,7 @@
     "jsx": "react-jsx",
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "types": ["node"],
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
@@ -15,5 +16,10 @@
   "include": [
     "**/*.ts",
     "**/*.tsx"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "test/fixtures"
   ]
 }

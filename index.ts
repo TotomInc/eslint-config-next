@@ -9,6 +9,9 @@ import antfu, {
 import type { OptionsConfig, TypedFlatConfigItem } from "@antfu/eslint-config";
 
 import { baseConfig } from "./configs/base";
+import type { Framework } from "./configs/detect";
+import { detectFramework, detectTailwindcss } from "./configs/detect";
+import { javascriptConfig } from "./configs/javascript";
 import { nextjsConfigs } from "./configs/nextjs";
 import { prettierConfig, prettierOptions } from "./configs/prettier";
 import { reactConfigs } from "./configs/react";
@@ -17,22 +20,13 @@ import { typeSafetyConfigs } from "./configs/type-safety";
 import { vueConfigs } from "./configs/vue";
 import { antiSlopPlugin, antiSlopRules } from "./plugin/anti-slop";
 
-export type Framework = "next" | "none" | "react" | "vue";
-
-export interface UserConfig {
+export interface Options {
   /**
    * UI framework of the project. Use `"none"` for plain TypeScript projects (Node.js, libraries).
    *
-   * @default "next" when `enableNextSupport` is set, otherwise "react"
+   * @default detected from the `package.json` dependencies: `next`, then `vue`/`nuxt`, then `react`
    */
   framework?: Framework;
-  /**
-   * Enable Next.js support.
-   *
-   * @deprecated Use `framework: "next"` instead.
-   * @default false
-   */
-  enableNextSupport?: boolean;
   /**
    * Project type. `"lib"` also requires explicit return types on exported functions.
    *
@@ -40,11 +34,11 @@ export interface UserConfig {
    */
   type?: "app" | "lib";
   /**
-   * Glob patterns of files to ignore.
+   * Glob patterns of files to ignore, on top of `.gitignore` and antfu's defaults.
    *
    * @default []
    */
-  ignoredFiles?: string[];
+  ignores?: string[];
   /**
    * Path to the `tsconfig.json` used for type-aware rules, or `false` to disable type-aware linting.
    *
@@ -52,29 +46,29 @@ export interface UserConfig {
    */
   tsconfigPath?: string | false;
   /**
-   * Enable the stricter type-safety rules (`no-explicit-any`, `no-non-null-assertion`,
-   * `no-unnecessary-condition`, `prefer-nullish-coalescing`, ...).
+   * Enable the stricter type-safety rules (`no-explicit-any`, `no-unsafe-type-assertion`,
+   * `strict-boolean-expressions`, `no-unnecessary-condition`, ...).
    *
    * @default true
    */
   strictTypeSafety?: boolean;
   /**
-   * Path to the Tailwind CSS entry point, or `false` to disable Tailwind CSS rules.
+   * Tailwind CSS rules. `entryPoint` is the CSS file importing `tailwindcss`.
    *
-   * @default "app/globals.css"
+   * @default enabled when `tailwindcss` is a dependency, with a detected entry point
    */
-  tailwindcssConfigPath?: string | false;
+  tailwindcss?: boolean | { entryPoint?: string };
   /**
-   * Enable accessibility rules: `eslint-plugin-jsx-a11y` for React and Next.js, or
-   * `eslint-plugin-vuejs-accessibility` for Vue. The plugin must be installed in the project.
+   * Accessibility rules: `eslint-plugin-jsx-a11y` for React and Next.js,
+   * `eslint-plugin-vuejs-accessibility` for Vue.
    *
-   * @default false
+   * @default true
    */
   a11y?: boolean;
   /**
-   * Enable anti-slop rules that reject low-evidence TypeScript and JavaScript patterns.
+   * Anti-slop rules that reject low-evidence TypeScript and JavaScript patterns.
    *
-   * @default false
+   * @default true
    */
   antislop?: boolean;
   /**
@@ -83,23 +77,35 @@ export interface UserConfig {
   antfu?: OptionsConfig;
 }
 
-export async function totominc(config: UserConfig = {}, ...userConfigs: TypedFlatConfigItem[]) {
-  // eslint-disable-next-line ts/no-deprecated -- kept for backward compatibility.
-  const framework = config.framework ?? (config.enableNextSupport ? "next" : "react");
+function resolveTailwindcss(option: Options["tailwindcss"]): { entryPoint?: string } | false {
+  if (option === undefined) {
+    return detectTailwindcss();
+  }
+
+  if (option === true) {
+    const detected = detectTailwindcss();
+
+    return detected === false ? {} : detected;
+  }
+
+  return option;
+}
+
+export async function totominc(options: Options = {}, ...userConfigs: TypedFlatConfigItem[]) {
+  const framework = options.framework ?? detectFramework();
   const isReact = framework === "react" || framework === "next";
   const isVue = framework === "vue";
-  const tsconfigPath = config.tsconfigPath ?? "./tsconfig.json";
+  const tsconfigPath = options.tsconfigPath ?? "./tsconfig.json";
   const typeAware = tsconfigPath !== false;
-  const strictTypeSafety = config.strictTypeSafety ?? true;
-  const a11y = config.a11y ?? false;
-  const tailwindcssEntryPoint = config.tailwindcssConfigPath ?? "app/globals.css";
+  const a11y = options.a11y ?? true;
+  const tailwindcss = resolveTailwindcss(options.tailwindcss);
 
   const sourceFiles = isVue ? [GLOB_SRC, GLOB_VUE] : [GLOB_SRC];
   const componentFiles = isVue ? [GLOB_VUE] : isReact ? [GLOB_TSX, GLOB_JSX] : [];
 
   return antfu(
     {
-      type: config.type ?? "app",
+      type: options.type ?? "app",
 
       stylistic: {
         indent: 2,
@@ -115,22 +121,24 @@ export async function totominc(config: UserConfig = {}, ...userConfigs: TypedFla
       nextjs: framework === "next",
       vue: isVue ? { a11y } : false,
 
-      ...config.antfu,
+      ...options.antfu,
     },
     prettierConfig(sourceFiles),
     baseConfig(sourceFiles),
-    ...(strictTypeSafety
-      ? typeSafetyConfigs({ typeAware, componentFiles: isVue ? [GLOB_VUE] : [] })
-      : []),
+    javascriptConfig(sourceFiles),
+    ...(options.strictTypeSafety === false
+      ? []
+      : typeSafetyConfigs({ typeAware, componentFiles: isVue ? [GLOB_VUE] : [] })),
     ...(isReact ? reactConfigs({ typeAware }) : []),
     ...(framework === "next" ? nextjsConfigs({ a11y }) : []),
     ...(isVue ? vueConfigs() : []),
-    ...(tailwindcssEntryPoint !== false && componentFiles.length > 0
-      ? [tailwindcssConfig({ files: componentFiles, entryPoint: tailwindcssEntryPoint })]
+    ...(tailwindcss !== false && componentFiles.length > 0
+      ? [tailwindcssConfig({ files: componentFiles, entryPoint: tailwindcss.entryPoint })]
       : []),
-    { name: "totominc/ignores", ignores: [...(config.ignoredFiles ?? [])] },
-    ...(config.antislop
-      ? [
+    { name: "totominc/ignores", ignores: [...(options.ignores ?? [])] },
+    ...(options.antislop === false
+      ? []
+      : [
           {
             name: "totominc/anti-slop",
             files: [GLOB_SRC],
@@ -140,11 +148,12 @@ export async function totominc(config: UserConfig = {}, ...userConfigs: TypedFla
             },
             rules: { ...antiSlopRules },
           } satisfies TypedFlatConfigItem,
-        ]
-      : []),
+        ]),
     ...userConfigs,
   );
 }
 
+export { detectFramework, detectTailwindcss };
 export { antiSlopPlugin, antiSlopRules, prettierOptions };
+export type { Framework };
 export { GLOB_JSX, GLOB_SRC, GLOB_TS, GLOB_TSX, GLOB_VUE };
