@@ -10,7 +10,7 @@ export function Carousel() {
       />
 
       <div className="relative flex w-full max-w-3xl flex-col items-center justify-center gap-6 px-6 lg:gap-10">
-        <p className="font-landscaper-1-heading text-center text-3xl font-semibold tracking-tight text-balance text-white lg:text-7xl">
+        <p className="text-center font-landscaper-1-heading text-3xl font-semibold tracking-tight text-balance text-white lg:text-7xl">
           Une équipe experte et à votre écoute
         </p>
 

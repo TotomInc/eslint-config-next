@@ -2,7 +2,7 @@
   "name": "@totominc/eslint-config-next",
   "type": "module",
   "version": "3.0.0",
-  "description": "Enhanced ESLint config for Next.js projects.",
+  "description": "Strict, type-safe ESLint config for React, Next.js, Vue and TypeScript projects, built on @antfu/eslint-config.",
   "author": "Thomas Cazade <cazade.thomas@gmail.com>",
   "license": "GPL-3",
   "repository": {
@@ -29,7 +29,8 @@
     "debug-config": "npx @eslint/config-inspector --open false",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "vitest run"
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "eslint": "^10.2.0"

@@ -24,8 +24,15 @@ jobs:
       - name: Install dependencies
         run: npm i --no-audit
 
+      - name: Typecheck
+        run: npm run typecheck
+
       - name: Test
         run: npm test
 
       - name: Build
         run: npm run build
+
+      # The repository lints itself with the freshly built config.
+      - name: Lint
+        run: npm run lint

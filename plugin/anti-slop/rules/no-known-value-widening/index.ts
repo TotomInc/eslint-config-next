@@ -38,7 +38,7 @@ function isStableConstVariable(
   return (
     parent?.type === "VariableDeclaration" &&
     parent.kind === "const" &&
-    variable.references.every((reference) => reference.init || !reference.isWrite())
+    variable.references.every((reference) => reference.init === true || !reference.isWrite())
   );
 }
 
@@ -65,11 +65,7 @@ function hasKnownEvidence(
 
   const declarator = variableDeclarator(variable, true);
 
-  if (
-    declarator === null ||
-    declarator.init === null ||
-    !isStableConstVariable(variable, declarator)
-  ) {
+  if (declarator?.init == null || !isStableConstVariable(variable, declarator)) {
     return false;
   }
 
@@ -244,7 +240,7 @@ export const noKnownValueWideningRule = createRule({
 
         const declarator = variableDeclarator(variable);
 
-        if (declarator === null || declarator.id.type !== "Identifier") {
+        if (declarator?.id.type !== "Identifier") {
           return;
         }
 

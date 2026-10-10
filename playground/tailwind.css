@@ -3,4 +3,5 @@
 @theme inline {
   --color-primary: #000;
   --color-secondary: #fff;
+  --font-landscaper-1-heading: "Playfair Display", serif;
 }

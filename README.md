@@ -14,12 +14,94 @@ import { totominc } from "@totominc/eslint-config-next";
 export default totominc();
 ```
 
-Enable [anti-slop](https://github.com/dmmulroy/anti-slop) rules with `antislop: true`:
+Pick the framework of your project with `framework` (defaults to `"react"`):
 
 ```js
-import { totominc } from "@totominc/eslint-config-next";
+// Next.js (App Router or Pages Router).
+export default totominc({ framework: "next" });
+```
 
-export default totominc({ antislop: true });
+```js
+// Vue 3 (`<script setup lang="ts">` SFCs).
+export default totominc({ framework: "vue" });
+```
+
+```js
+// Plain TypeScript (Node.js, libraries, CLIs): no React/Vue/Tailwind rules.
+export default totominc({ framework: "none", type: "lib" });
+```
+
+Extra flat config items can be passed after the options, and win over everything else:
+
+```js
+export default totominc(
+  { framework: "next" },
+  {
+    files: ["scripts/**"],
+    rules: { "no-console": "off" },
+  },
+);
+```
+
+### Options
+
+| Option                  | Default             | Description                                                                                                                                                          |
+| ----------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `framework`             | `"react"`           | `"react"`, `"next"`, `"vue"` or `"none"`.                                                                                                                            |
+| `type`                  | `"app"`             | `"lib"` also requires explicit return types on functions.                                                                                                            |
+| `tsconfigPath`          | `"./tsconfig.json"` | `tsconfig.json` used for type-aware rules, or `false` to disable type-aware linting.                                                                                 |
+| `strictTypeSafety`      | `true`              | Stricter type-safety rules, see [Type safety](#type-safety).                                                                                                         |
+| `tailwindcssConfigPath` | `"app/globals.css"` | Tailwind CSS entry point, or `false` to disable Tailwind CSS rules.                                                                                                  |
+| `a11y`                  | `false`             | Accessibility rules. Requires `eslint-plugin-jsx-a11y` (React, Next.js) or `eslint-plugin-vuejs-accessibility` (Vue). With Next.js, `<Image>` is checked for `alt`. |
+| `antislop`              | `false`             | [Anti-slop rules](#anti-slop-rules).                                                                                                                                 |
+| `ignoredFiles`          | `[]`                | Glob patterns of files to ignore.                                                                                                                                    |
+| `antfu`                 | `{}`                | Escape hatch forwarded to [`@antfu/eslint-config`](https://github.com/antfu/eslint-config) (e.g. `{ unocss: true }`).                                                |
+| `enableNextSupport`     | `false`             | **Deprecated**, use `framework: "next"`.                                                                                                                             |
+
+> `eslint-plugin-jsx-a11y` does not declare ESLint 10 in its peer range yet, install it with `npm i -D eslint-plugin-jsx-a11y --legacy-peer-deps` (it works fine with ESLint 10).
+
+### Next.js
+
+`framework: "next"` enables `@next/eslint-plugin-next` with the `recommended` and `core-web-vitals` rules through antfu's preset, plus what `eslint-config-next` 16.4 adds on top:
+
+- ignores `out/`, `build/` and `next-env.d.ts` (`.next/` is already ignored by antfu),
+- `process.env` without `import process from "node:process"`,
+- with `a11y: true`, `jsx-a11y/alt-text` also checks `next/image`'s `<Image>`.
+
+There is no need to install `eslint-config-next`: it would register a second React plugin (`eslint-plugin-react`), a second import plugin and a Babel parser on top of antfu's `@eslint-react`, `import-lite` and `typescript-eslint` setup. React Hooks and React Compiler rules (`rules-of-hooks`, `exhaustive-deps`, `purity`, `set-state-in-render`, ...) come from `@eslint-react`.
+
+### Vue
+
+`framework: "vue"` enables antfu's Vue preset with the same personal preferences as React:
+
+- Prettier formats `.vue` files, conflicting `vue/*` stylistic rules are disabled,
+- attributes are sorted alphabetically, events last (`vue/attributes-order`), like `perfectionist/sort-jsx-props`,
+- every element without content self-closes (`vue/html-self-closing`), like `style/jsx-self-closing-comp`,
+- only typed `<script setup lang="ts">`: `vue/block-lang`, `vue/component-api-style`, type-based `defineProps`/`defineEmits`, typed `ref()`, explicit slots,
+- dead code: unused props, emits and template refs are reported,
+- Tailwind CSS class order and validation in templates.
+
+### Type safety
+
+With `strictTypeSafety` (default), on top of antfu's type-aware rules:
+
+- `any`, non-null assertions (`!`) and `<T>value` / `{} as T` assertions are errors,
+- unnecessary conditions, `||` instead of `??`, missing optional chaining, unnecessary type arguments/parameters/conversions,
+- throwing or rejecting non-`Error` values, `async` functions without `await`, `switch` over unions that are not exhaustive,
+- deprecated APIs are warnings,
+- React: props declared but never used (`react/no-unused-props`), unstable context values and default props, `<button>` without `type`, `target="_blank"` without `rel`.
+
+Type-aware rules are much more effective with a strict `tsconfig.json`:
+
+```jsonc
+{
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true
+  }
+}
 ```
 
 Add scripts to your `package.json`:

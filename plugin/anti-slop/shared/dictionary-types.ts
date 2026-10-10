@@ -163,7 +163,7 @@ function isNeverType(type: TSESTree.TypeNode): boolean {
 function isEffectivelyEmptyMember(member: TSESTree.TypeElement): boolean {
   return (
     member.type === "TSPropertySignature" &&
-    member.optional === true &&
+    member.optional &&
     member.typeAnnotation !== undefined &&
     isNeverType(member.typeAnnotation.typeAnnotation)
   );
@@ -183,8 +183,7 @@ function isEffectivelyEmptyInterface(
   const [type] = declarations;
 
   return (
-    type !== undefined &&
-    type.extends.length === 0 &&
+    type?.extends.length === 0 &&
     (type.body.body.length === 0 || type.body.body.every(isEffectivelyEmptyMember))
   );
 }
@@ -282,9 +281,9 @@ function unsafeDirectValue(
       return "any";
     }
 
-    return unsafeMembers.length > 0 && unsafeMembers.every((member) => member !== null)
-      ? unsafeMembers[0]
-      : null;
+    const [firstMember = null] = unsafeMembers;
+
+    return unsafeMembers.every((member) => member !== null) ? firstMember : null;
   }
 
   if (unwrapped.type !== "TSTypeReference") {
