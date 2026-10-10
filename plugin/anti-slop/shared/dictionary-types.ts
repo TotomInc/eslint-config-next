@@ -107,11 +107,10 @@ export function createTypeEnvironment(program: TSESTree.Program): TypeEnvironmen
 
     if (
       (declaration?.type === "ClassDeclaration" || declaration?.type === "FunctionDeclaration") &&
-      declaration.id !== null
+      declaration.id !== null &&
+      BUILT_INS.has(declaration.id.name)
     ) {
-      if (BUILT_INS.has(declaration.id.name)) {
-        shadowedBuiltIns.add(declaration.id.name);
-      }
+      shadowedBuiltIns.add(declaration.id.name);
     }
   }
 
@@ -163,14 +162,14 @@ function isNeverType(type: TSESTree.TypeNode): boolean {
 function isEffectivelyEmptyMember(member: TSESTree.TypeElement): boolean {
   return (
     member.type === "TSPropertySignature" &&
-    member.optional === true &&
+    member.optional &&
     member.typeAnnotation !== undefined &&
     isNeverType(member.typeAnnotation.typeAnnotation)
   );
 }
 
 function isEffectivelyEmptyTypeLiteral(type: TSESTree.TSTypeLiteral): boolean {
-  return type.members.length === 0 || type.members.every(isEffectivelyEmptyMember);
+  return type.members.every(isEffectivelyEmptyMember);
 }
 
 function isEffectivelyEmptyInterface(
@@ -182,11 +181,7 @@ function isEffectivelyEmptyInterface(
 
   const [type] = declarations;
 
-  return (
-    type !== undefined &&
-    type.extends.length === 0 &&
-    (type.body.body.length === 0 || type.body.body.every(isEffectivelyEmptyMember))
-  );
+  return type?.extends.length === 0 && type.body.body.every(isEffectivelyEmptyMember);
 }
 
 function resolvedSubstitutionArgument(
@@ -282,9 +277,9 @@ function unsafeDirectValue(
       return "any";
     }
 
-    return unsafeMembers.length > 0 && unsafeMembers.every((member) => member !== null)
-      ? unsafeMembers[0]
-      : null;
+    const [firstMember = null] = unsafeMembers;
+
+    return unsafeMembers.every((member) => member !== null) ? firstMember : null;
   }
 
   if (unwrapped.type !== "TSTypeReference") {

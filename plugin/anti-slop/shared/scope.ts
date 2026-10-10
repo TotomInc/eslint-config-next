@@ -31,7 +31,7 @@ export function variableDeclarator(
   }
 
   for (const definition of variable.defs) {
-    if (definition.type === "Variable" && definition.node.type === "VariableDeclarator") {
+    if (definition.type === "Variable") {
       return definition.node;
     }
   }

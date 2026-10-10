@@ -4,7 +4,7 @@ import { antiSlopPlugin, antiSlopRules } from ".";
 
 describe("anti-slop plugin", () => {
   it("exports every documented rule", () => {
-    expect(Object.keys(antiSlopPlugin.rules ?? {}).sort()).toEqual(
+    expect(Object.keys(antiSlopPlugin.rules).sort()).toEqual(
       Object.keys(antiSlopRules)
         .map((name) => name.replace("anti-slop/", ""))
         .sort(),
