@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@antfu/eslint-config": "9.5.1",
-    "@eslint-react/eslint-plugin": "5.24.10",
+    "@eslint-react/eslint-plugin": "5.26.1",
     "@next/eslint-plugin-next": "16.4.0",
     "@typescript-eslint/utils": "8.71.1",
     "eslint-plugin-better-tailwindcss": "4.9.0",
