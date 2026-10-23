@@ -53,15 +53,15 @@
     }
   },
   "dependencies": {
-    "@antfu/eslint-config": "9.5.1",
-    "@eslint-react/eslint-plugin": "5.26.1",
-    "@next/eslint-plugin-next": "16.4.0",
-    "@typescript-eslint/utils": "8.71.1",
-    "eslint-plugin-better-tailwindcss": "4.9.0",
+    "@antfu/eslint-config": "10.0.0",
+    "@eslint-react/eslint-plugin": "5.28.8",
+    "@next/eslint-plugin-next": "16.4.3",
+    "@typescript-eslint/utils": "8.72.0",
+    "eslint-plugin-better-tailwindcss": "4.10.0",
     "eslint-plugin-jsx-a11y": "6.10.2",
-    "eslint-plugin-prettier": "5.5.6",
+    "eslint-plugin-prettier": "5.5.7",
     "eslint-plugin-react-refresh": "0.5.7",
-    "eslint-plugin-vuejs-accessibility": "2.6.2",
+    "eslint-plugin-vuejs-accessibility": "2.6.3",
     "prettier": "3.9.10",
     "tailwindcss": "4.3.3"
   },
@@ -69,16 +69,16 @@
     "@types/node": "24.19.2",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
-    "@typescript-eslint/parser": "8.71.1",
-    "@typescript-eslint/rule-tester": "8.71.1",
-    "eslint": "10.12.0",
-    "eslint-plugin-turbo": "2.11.7",
-    "react": "19.3.0",
-    "react-dom": "19.3.0",
-    "tsup": "8.5.1",
-    "turbo": "2.11.7",
+    "@typescript-eslint/parser": "8.72.0",
+    "@typescript-eslint/rule-tester": "8.72.0",
+    "eslint": "10.13.0",
+    "eslint-plugin-turbo": "2.11.10",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tsup": "9.0.0",
+    "turbo": "2.11.10",
     "typescript": "6.0.3",
-    "vitest": "5.0.3"
+    "vitest": "5.0.5"
   },
   "overrides": {
     "eslint-plugin-jsx-a11y": {
