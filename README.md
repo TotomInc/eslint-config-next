@@ -39,6 +39,14 @@ export default totominc(
 );
 ```
 
+`totominc()` returns antfu's [composer](https://github.com/antfu/eslint-flat-config-utils#composer), so the resulting config can be chained:
+
+```js
+export default totominc().override("antfu/javascript/rules", {
+  rules: { "no-console": "off" },
+});
+```
+
 ### Options
 
 | Option             | Default             | Description                                                                                                                       |

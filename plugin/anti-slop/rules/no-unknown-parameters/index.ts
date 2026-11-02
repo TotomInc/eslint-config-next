@@ -22,7 +22,6 @@ export const noUnknownParametersRule = createRule({
         "Parameter `{{parameter}}` accepts `unknown` without establishing its contract. Define the expected schema or parser so the value becomes a strongly typed domain type at the earliest possible point, as close as possible to the I/O boundary where the data originated.",
     },
   },
-  defaultOptions: [],
   create(context) {
     return parameterOwnerListeners((node) => {
       for (const parameter of node.params) {

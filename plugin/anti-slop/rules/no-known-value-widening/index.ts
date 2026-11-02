@@ -162,7 +162,6 @@ export const noKnownValueWideningRule = createRule({
         "The known initializer supplying {{subject}} carries established type evidence, but the explicit {{target}} target type discards it. Preserve inference, use `satisfies`, or introduce/use a named owner contract; parse genuinely external data once at its boundary.",
     },
   },
-  defaultOptions: [],
   create(context) {
     const environment = createTypeEnvironment(context.sourceCode.ast);
 

@@ -360,7 +360,6 @@ export const noWidenThenAssertRule = createRule({
         'Binding "{{name}}" erases established type evidence by widening the value, then reconstructs that evidence with a type assertion. Preserve the precise type end-to-end; if the input is genuinely unknown, parse it once at the boundary instead.',
     },
   },
-  defaultOptions: [],
   create(context) {
     const checkAssertion = (node: TSESTree.TSAsExpression | TSESTree.TSTypeAssertion) => {
       const expression = assertedExpression(node);

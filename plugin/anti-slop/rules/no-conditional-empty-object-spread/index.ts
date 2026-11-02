@@ -31,7 +31,6 @@ export const noConditionalEmptyObjectSpreadRule = createRule({
         "Do not use conditional empty-object spreads. Prefer a direct property or build the object in separate statements.",
     },
   },
-  defaultOptions: [],
   create(context) {
     return {
       SpreadElement(node) {

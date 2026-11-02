@@ -17,7 +17,6 @@ export const noRuntimeTypeofRule = createRule({
         "A runtime `typeof` check only narrows an unparsed representation; it does not establish the expected contract. Parse the value into a strongly typed domain type at the earliest possible point, as close as possible to the I/O boundary where the data originated.",
     },
   },
-  defaultOptions: [],
   create(context) {
     return {
       UnaryExpression(node) {

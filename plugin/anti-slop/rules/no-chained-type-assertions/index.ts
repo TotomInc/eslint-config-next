@@ -55,7 +55,6 @@ export const noChainedTypeAssertionsRule = createRule({
         "Chained type assertions discard existing type evidence and fabricate the target type without parsing. Preserve the value's original precise type, or parse genuinely unknown input at its boundary before using it.",
     },
   },
-  defaultOptions: [],
   create(context) {
     const checkTypeAssertion = (node: TSESTree.TSAsExpression | TSESTree.TSTypeAssertion) => {
       if (!isOutermostAssertionInChain(node) || !isForbiddenAssertionChain(node)) {

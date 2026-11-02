@@ -45,6 +45,7 @@ const stylisticRulesHandledByPrettier = {
   "style/jsx-curly-newline": ["off"],
   "unicorn/number-literal-case": ["off"],
   "antfu/consistent-list-newline": ["off"],
+  "antfu/reasonable-newline": ["off"],
 } satisfies TypedFlatConfigItem["rules"];
 
 /**
