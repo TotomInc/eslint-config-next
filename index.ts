@@ -98,7 +98,18 @@ function resolveTailwindcss(option: Options["tailwindcss"]): { entryPoint?: stri
   return option;
 }
 
-export async function totominc(options: Options = {}, ...userConfigs: TypedFlatConfigItem[]) {
+/**
+ * The composer returned by `@antfu/eslint-config`, so consumers can keep chaining
+ * (`.append()`, `.override()`, `.renamePlugins()`, ...).
+ */
+export type TotomincConfig = ReturnType<typeof antfu>;
+
+// The composer is thenable but must not be awaited here, or callers lose the chaining API.
+// eslint-disable-next-line ts/promise-function-async
+export function totominc(
+  options: Options = {},
+  ...userConfigs: TypedFlatConfigItem[]
+): TotomincConfig {
   const framework = options.framework ?? detectFramework();
   const isReact = framework === "react" || framework === "next";
   const isVue = framework === "vue";

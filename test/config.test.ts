@@ -163,6 +163,30 @@ describe("totominc", () => {
     );
   });
 
+  it("returns the antfu composer so configs can be chained", async () => {
+    const config = await totominc({ framework: "none" }).override("antfu/javascript/rules", {
+      rules: { "no-console": "off" },
+    });
+    const javascriptRules = config.find((item) => item.name === "antfu/javascript/rules");
+
+    expect(javascriptRules?.rules?.["no-console"]).toBe("off");
+  });
+
+  it("turns off antfu newline rules that fight with prettier", async () => {
+    const eslint = new ESLint({
+      overrideConfigFile: true,
+      overrideConfig: await totominc({ framework: "react" }),
+    });
+    const resolved: unknown = await eslint.calculateConfigForFile(fixture("Clean.tsx"));
+
+    expect(resolved).toMatchObject({
+      rules: {
+        "antfu/consistent-list-newline": [0],
+        "antfu/reasonable-newline": [0],
+      },
+    });
+  });
+
   it("reports no error on a well-formatted Vue SFC", async () => {
     const messages = await lint({ framework: "vue" }, "Clean.vue");
 

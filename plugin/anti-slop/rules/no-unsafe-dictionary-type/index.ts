@@ -77,7 +77,6 @@ export const noUnsafeDictionaryTypeRule = createRule({
         "This object dictionary's direct value type is an unsafe {{value}} escape hatch. Replace it with a concrete owner/schema-derived value type and parse external data at its boundary.",
     },
   },
-  defaultOptions: [],
   create(context) {
     const environment = createTypeEnvironment(context.sourceCode.ast);
 

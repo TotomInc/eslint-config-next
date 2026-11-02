@@ -24,7 +24,6 @@ export const noObjectParametersRule = createRule({
         "Parameter `{{parameter}}` accepts the broad `object` type. Use the expected owner type or decode the external input at its boundary.",
     },
   },
-  defaultOptions: [],
   create(context) {
     const aliases = new Map<string, TSESTree.TypeNode>();
 

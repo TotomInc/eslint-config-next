@@ -29,7 +29,6 @@ export const noUnknownTypeAliasesRule = createRule({
         "Type alias `{{alias}}` only renames `unknown`. Keep `unknown` explicit on an allowed `cause` field or replace it with the parsed owner type.",
     },
   },
-  defaultOptions: [],
   create(context) {
     const aliases = new Map<string, TSESTree.TSTypeAliasDeclaration>();
 

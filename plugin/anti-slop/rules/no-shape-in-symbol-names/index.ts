@@ -25,7 +25,6 @@ export const noShapeInSymbolNamesRule = createRule({
         'Do not use the case-insensitive substring "shape" in symbol names (found "{{name}}").',
     },
   },
-  defaultOptions: [],
   create(context) {
     const reportForbiddenSymbolName = (node: TSESTree.Node & { name: string }) => {
       if (!containsForbiddenSymbolName(node.name)) {
